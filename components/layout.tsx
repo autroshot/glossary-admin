@@ -12,9 +12,9 @@ export default function Layout({ children }: Props) {
   return (
     <>
       <nav>
-        <Flex minWidth="max-content" alignItems="center" gap="2">
+        <Flex minWidth="max-content" alignItems="center" px="6" py="3" gap="2">
           <Box p="2">
-            <Heading size="md">Chakra App</Heading>
+            <Heading size="md">용어집 관리자</Heading>
           </Box>
           <Spacer />
           <ButtonGroup gap="2">
