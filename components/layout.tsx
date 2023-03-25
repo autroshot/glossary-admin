@@ -1,14 +1,17 @@
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
   Box,
-  Button,
-  ButtonGroup,
   Flex,
   Heading,
+  IconButton,
   Spacer,
+  useColorMode,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 export default function Layout({ children }: Props) {
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
     <>
       <nav>
@@ -17,10 +20,11 @@ export default function Layout({ children }: Props) {
             <Heading size="md">용어집 관리자</Heading>
           </Box>
           <Spacer />
-          <ButtonGroup gap="2">
-            <Button colorScheme="teal">Sign Up</Button>
-            <Button colorScheme="teal">Log in</Button>
-          </ButtonGroup>
+          <IconButton
+            aria-label="어두운 모드"
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+          />
         </Flex>
       </nav>
       <main>{children}</main>
