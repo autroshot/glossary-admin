@@ -1,6 +1,5 @@
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import {
-  Box,
   Flex,
   Heading,
   IconButton,
@@ -15,9 +14,9 @@ export default function Navbar() {
 
   return (
     <Flex minWidth="max-content" alignItems="center" px="6" py="3" gap="2">
-      <Box p="2">
+      <Link as={NextLink} href="/" m="2">
         <Heading size="md">용어집 관리자</Heading>
-      </Box>
+      </Link>
       <Link as={NextLink} href="/google-translation" ms="3">
         구글 번역
       </Link>
