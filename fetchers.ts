@@ -5,3 +5,9 @@ export async function createGlossary() {
 
   return res.data;
 }
+
+export async function getGlossaries() {
+  const res = await axios.get('/api/google-glossary');
+
+  return res.data;
+}
