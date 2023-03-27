@@ -46,12 +46,12 @@ export default async function handler(
       },
     });
 
-    const result = await client.listGlossaries({
+    const queryResult = await client.listGlossaries({
       parent,
     });
-    console.log(result);
+    const glossaries = queryResult[0];
 
-    res.status(200).json({ message: '용어집 읽기 완료!' });
+    res.status(200).json({ data: glossaries });
   } else {
     res.status(405).end();
   }
