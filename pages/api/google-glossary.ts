@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const parent = `projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1`;
 
-  if (req.method === 'GET') {
+  if (req.method === 'POST') {
     req.body;
 
     const client = new TranslationServiceClient({
@@ -35,7 +35,7 @@ export default async function handler(
     console.log(result);
 
     res.status(200).json({ message: '용어집 생성 완료!' });
-  } else if (req.method === 'POST') {
+  } else if (req.method === 'GET') {
     const client = new TranslationServiceClient({
       credentials: {
         client_email: process.env.GOOGLE_CLIENT_EMAIL,
