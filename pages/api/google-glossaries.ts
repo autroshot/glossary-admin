@@ -1,4 +1,4 @@
-import { createGlossary, getGlossaries } from '@/controllers/google-glossary';
+import { getGlossaries } from '@/controllers/google-glossary';
 import { controllerSwitch } from '@/utils/api';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,7 +7,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await controllerSwitch(req, res, {
-    POSTController: createGlossary,
     GETController: getGlossaries,
   });
 }
