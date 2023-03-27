@@ -1,9 +1,8 @@
 import { Controller } from '@/types/controller';
 import { TranslationServiceClient } from '@google-cloud/translate';
+import { PARENT } from './constants';
 
 const createGlossary: Controller = async (req, res) => {
-  const parent = `projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1`;
-
   const client = new TranslationServiceClient({
     credentials: {
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -15,7 +14,7 @@ const createGlossary: Controller = async (req, res) => {
   });
 
   const result = await client.createGlossary({
-    parent,
+    parent: PARENT,
     glossary: {
       name: `projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/my-glossary2`,
       languagePair: { sourceLanguageCode: 'en', targetLanguageCode: 'ko' },
@@ -32,8 +31,6 @@ const createGlossary: Controller = async (req, res) => {
 };
 
 const getGlossaries: Controller = async (req, res) => {
-  const parent = `projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1`;
-
   const client = new TranslationServiceClient({
     credentials: {
       client_email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -45,7 +42,7 @@ const getGlossaries: Controller = async (req, res) => {
   });
 
   const queryResult = await client.listGlossaries({
-    parent,
+    parent: PARENT,
   });
   const glossaries = queryResult[0];
 
