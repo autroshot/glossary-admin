@@ -41,7 +41,7 @@ export default function GlossaryTable() {
                   <ButtonLink
                     text="보기"
                     size="sm"
-                    href="/google-glossary/123"
+                    href={`/google-glossary/${glossary.displayName}`}
                   />
                 </Td>
               </Tr>
