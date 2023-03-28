@@ -17,7 +17,7 @@ export default function GlossaryTable() {
           <Tr>
             <Th>영어</Th>
             <Th>한국어</Th>
-            <Th textAlign="center">상세</Th>
+            <Th textAlign="center">양식</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -29,7 +29,7 @@ export default function GlossaryTable() {
               영어
             </Td>
             <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
+              <Button size="sm">열기</Button>
             </Td>
           </Tr>
           <Tr>
@@ -40,7 +40,7 @@ export default function GlossaryTable() {
               영어
             </Td>
             <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
+              <Button size="sm">열기</Button>
             </Td>
           </Tr>
           <Tr>
@@ -51,7 +51,7 @@ export default function GlossaryTable() {
               영어영어영어영어영어영어영어영어영어영어영어영어영어영어
             </Td>
             <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
+              <Button size="sm">열기</Button>
             </Td>
           </Tr>
         </Tbody>
