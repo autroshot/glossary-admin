@@ -1,22 +1,11 @@
+import TermFormDrawer from '@/components/google-glossary/term-form-drawer';
 import TermTable from '@/components/google-glossary/term-table';
 import {
   Box,
   Button,
-  ButtonGroup,
   Container,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  FormControl,
-  FormLabel,
   Heading,
-  Input,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
@@ -36,43 +25,7 @@ export default function GoogleGlossaryDetail() {
           <TermTable />
         </Box>
       </Container>
-      <Drawer size="lg" isOpen={isOpen} onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>용어 양식</DrawerHeader>
-
-          <DrawerBody>
-            <form
-              id="my-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                console.log('submitted');
-              }}
-            >
-              <VStack>
-                <FormControl>
-                  <FormLabel>영어</FormLabel>
-                  <Input type="text" />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>한국어</FormLabel>
-                  <Input type="text" />
-                </FormControl>
-              </VStack>
-            </form>
-          </DrawerBody>
-
-          <DrawerFooter>
-            <ButtonGroup>
-              <Button colorScheme="red">삭제</Button>
-              <Button type="submit" form="my-form">
-                수정
-              </Button>
-            </ButtonGroup>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      <TermFormDrawer isOpen={isOpen} onClose={onClose} />
     </>
   );
 }
