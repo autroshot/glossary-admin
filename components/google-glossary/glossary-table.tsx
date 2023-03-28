@@ -1,9 +1,6 @@
 import { getGlossaries } from '@/components/google-glossary/fetchers';
 import { Glossary } from '@/types/models';
 import {
-  Button,
-  LinkBox,
-  LinkOverlay,
   Table,
   TableContainer,
   Tbody,
@@ -12,8 +9,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import NextLink from 'next/link';
 import { useEffect, useState } from 'react';
+import ButtonLink from '../button-link';
 
 export default function GlossaryTable() {
   const [glossaries, setGlossaries] = useState<Glossary[]>([]);
@@ -41,13 +38,11 @@ export default function GlossaryTable() {
                   {glossary.displayName}
                 </Td>
                 <Td padding="0" textAlign="center">
-                  <LinkBox>
-                    <LinkOverlay as={NextLink} href="/google-glossary/123">
-                      <Button size="sm" tabIndex={-1}>
-                        보기
-                      </Button>
-                    </LinkOverlay>
-                  </LinkBox>
+                  <ButtonLink
+                    text="보기"
+                    size="sm"
+                    href="/google-glossary/123"
+                  />
                 </Td>
               </Tr>
             );
