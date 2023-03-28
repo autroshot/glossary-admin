@@ -1,3 +1,4 @@
+import GlossaryTable from '@/components/glossary-table';
 import { getGlossaries } from '@/fetchers';
 import { Box, Button, Container, Heading } from '@chakra-ui/react';
 
@@ -8,6 +9,7 @@ export default function GoogleGlossary() {
       <Box mt="3">
         <Button onClick={handleGetGlossariesButtonClick}>용어집들 읽기</Button>
       </Box>
+      <GlossaryTable />
     </Container>
   );
 
