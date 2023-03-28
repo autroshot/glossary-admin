@@ -1,5 +1,6 @@
+import { getGlossaries } from '@/fetchers';
+import { Glossary } from '@/types/models';
 import {
-  Box,
   Button,
   Table,
   TableCaption,
@@ -10,8 +11,17 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 export default function GlossaryTable() {
+  const [glossaries, setGlossaries] = useState<Glossary[]>([]);
+
+  useEffect(() => {
+    getGlossaries().then((glossaries) => {
+      setGlossaries(glossaries);
+    });
+  }, []);
+
   return (
     <TableContainer>
       <Table variant="simple">
@@ -25,32 +35,18 @@ export default function GlossaryTable() {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
-              my-glossary-1
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
-              my-glossary-2
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Box maxW="20rem" overflow="hidden" textOverflow="ellipsis">
-                my-glossary-3
-              </Box>
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">보기</Button>
-            </Td>
-          </Tr>
+          {glossaries.map((glossary) => {
+            return (
+              <Tr key={glossary.name}>
+                <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
+                  {glossary.displayName}
+                </Td>
+                <Td padding="0" textAlign="center">
+                  <Button size="sm">보기</Button>
+                </Td>
+              </Tr>
+            );
+          })}
         </Tbody>
       </Table>
     </TableContainer>
