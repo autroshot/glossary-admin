@@ -7,7 +7,7 @@ export default function GoogleGlossaryDetail() {
 
   return (
     <Container>
-      <Heading>구글 용어집 상세</Heading>
+      <Heading textAlign="center">구글 용어집 상세</Heading>
       <Box>{displayName}</Box>
     </Container>
   );
