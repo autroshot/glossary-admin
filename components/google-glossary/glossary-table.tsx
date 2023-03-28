@@ -3,7 +3,6 @@ import { Glossary } from '@/types/models';
 import {
   Button,
   Table,
-  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -25,9 +24,6 @@ export default function GlossaryTable() {
   return (
     <TableContainer>
       <Table variant="simple">
-        <TableCaption placement="top" fontSize="lg" fontWeight="bold">
-          용어집 목록
-        </TableCaption>
         <Thead>
           <Tr>
             <Th>이름</Th>
