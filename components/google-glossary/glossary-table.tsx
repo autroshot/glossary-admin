@@ -1,4 +1,4 @@
-import { getGlossaries } from '@/fetchers';
+import { getGlossaries } from '@/components/google-glossary/fetchers';
 import { Glossary } from '@/types/models';
 import {
   Button,
