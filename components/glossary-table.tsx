@@ -37,7 +37,7 @@ export default function GlossaryTable() {
         <Tbody>
           {glossaries.map((glossary) => {
             return (
-              <Tr key={glossary.name}>
+              <Tr key={glossary.displayName}>
                 <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
                   {glossary.displayName}
                 </Td>
