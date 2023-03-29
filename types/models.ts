@@ -1,20 +1,3 @@
-export interface GoogleGlossary {
-  name: string;
-  inputConfig: {
-    gcsSource: {
-      inputUri: string;
-    };
-  };
-  entryCount: number;
-  submitTime: string;
-  endTime: string;
-  displayName: string;
-  languagePair: {
-    sourceLanguageCode: string;
-    targetLanguageCode: string;
-  };
-}
-
 export interface MyGoogleGlossary {
   path: string;
   name: string;

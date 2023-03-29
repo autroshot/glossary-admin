@@ -1,5 +1,5 @@
 import { Controller } from '@/types/controller';
-import { GoogleGlossary, MyGoogleGlossary } from '@/types/models';
+import { MyGoogleGlossary } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const getGlossaries: Controller = async (req, res) => {
@@ -21,6 +21,23 @@ const getGlossaries: Controller = async (req, res) => {
     return { path: googleGlossary.name, name: googleGlossary.displayName };
   }
 };
+
+interface GoogleGlossary {
+  name: string;
+  inputConfig: {
+    gcsSource: {
+      inputUri: string;
+    };
+  };
+  entryCount: number;
+  submitTime: string;
+  endTime: string;
+  displayName: string;
+  languagePair: {
+    sourceLanguageCode: string;
+    targetLanguageCode: string;
+  };
+}
 
 interface GetGlossariesGoogleAPIResponse {
   glossaries: GoogleGlossary[];
