@@ -1,4 +1,4 @@
-import { getGlossaries } from '@/components/google-glossary/fetchers';
+import { getGlossaries } from '@/components/google-glossary/glossary/fetchers';
 import { MyGoogleGlossary } from '@/types/models';
 import {
   Table,
@@ -10,7 +10,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import ButtonLink from '../button-link';
+import ButtonLink from '../../button-link';
 
 export default function GlossaryTable() {
   const [glossaries, setGlossaries] = useState<MyGoogleGlossary[]>([]);

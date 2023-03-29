@@ -1,4 +1,4 @@
-import GlossaryTable from '@/components/google-glossary/glossary-table';
+import GlossaryTable from '@/components/google-glossary/glossary/table';
 import { Box, Container, Heading } from '@chakra-ui/react';
 
 export default function GoogleGlossaryList() {

@@ -1,5 +1,5 @@
-import TermFormDrawer from '@/components/google-glossary/term-form-drawer';
-import TermTable from '@/components/google-glossary/term-table';
+import TermFormDrawer from '@/components/google-glossary/term/form-drawer';
+import TermTable from '@/components/google-glossary/term/table';
 import {
   Box,
   Button,

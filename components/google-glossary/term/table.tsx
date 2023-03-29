@@ -9,7 +9,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-export default function GlossaryTable() {
+export default function TermTable() {
   return (
     <TableContainer>
       <Table variant="simple">
