@@ -1,5 +1,4 @@
 import { Controller } from '@/types/controller';
-import { isAxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const controllerSwitch: ControllerSwitch = async (
@@ -56,14 +55,6 @@ function handleErrorDecorator(
     try {
       await controllerSwitch(req, res, controllerByMethod);
     } catch (err) {
-      if (isAxiosError(err) && err.response?.status === 429) {
-        res.status(429).json({
-          message: '너무 많은 요청이 발생했습니다. 1분 후에 다시 시도해주세요.',
-        });
-
-        return;
-      }
-
       console.error(err);
       res.status(500).json({ message: '서버에 오류가 발생했습니다.' });
     }
