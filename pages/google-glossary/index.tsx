@@ -3,7 +3,7 @@ import { Box, Container, Heading } from '@chakra-ui/react';
 
 export default function GoogleGlossaryList() {
   return (
-    <Container>
+    <Container mb="10">
       <Heading textAlign="center">구글 용어집 목록</Heading>
       <Box mt="5">
         <GlossaryTable />

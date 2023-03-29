@@ -31,7 +31,7 @@ export default function TermContainer() {
 
   return (
     <>
-      <Container>
+      <Container maxW="container.sm" mb="10">
         <Heading textAlign="center">구글 용어집 상세</Heading>
         <Box mt="5">
           <Button onClick={handleCreateButtonClick}>생성</Button>
