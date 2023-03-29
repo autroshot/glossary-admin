@@ -3,15 +3,6 @@ export interface MyGoogleGlossary {
   name: string;
 }
 
-export interface GoogleGlossaryEntry {
-  name: string;
-  description: string;
-  termsPair: {
-    sourceTerm: GlossaryTerm;
-    targetTerm: GlossaryTerm;
-  };
-}
-
 export interface MyGoogleTerm extends Term {
   path: string;
 }
@@ -19,9 +10,4 @@ export interface MyGoogleTerm extends Term {
 interface Term {
   english: string;
   korean: string;
-}
-
-interface GlossaryTerm {
-  languageCode: string;
-  text: string;
 }
