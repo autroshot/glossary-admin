@@ -1,4 +1,4 @@
-export interface Glossary {
+export interface GoogleGlossary {
   name: string;
   inputConfig: {
     gcsSource: {
@@ -15,7 +15,7 @@ export interface Glossary {
   };
 }
 
-export interface GlossaryEntry {
+export interface GoogleGlossaryEntry {
   name: string;
   description: string;
   termsPair: {

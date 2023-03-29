@@ -1,5 +1,5 @@
 import { getGlossaries } from '@/components/google-glossary/fetchers';
-import { Glossary } from '@/types/models';
+import { GoogleGlossary } from '@/types/models';
 import {
   Table,
   TableContainer,
@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import ButtonLink from '../button-link';
 
 export default function GlossaryTable() {
-  const [glossaries, setGlossaries] = useState<Glossary[]>([]);
+  const [glossaries, setGlossaries] = useState<GoogleGlossary[]>([]);
 
   useEffect(() => {
     getGlossaries().then((glossaries) => {

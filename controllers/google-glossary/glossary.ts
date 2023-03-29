@@ -1,5 +1,5 @@
 import { Controller } from '@/types/controller';
-import { Glossary } from '@/types/models';
+import { GoogleGlossary } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const getGlossaries: Controller = async (req, res) => {
@@ -14,7 +14,7 @@ const getGlossaries: Controller = async (req, res) => {
 };
 
 interface GetGlossariesGoogleAPIResponse {
-  glossaries: Glossary[];
+  glossaries: GoogleGlossary[];
 }
 
 export { getGlossaries };
