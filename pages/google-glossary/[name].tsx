@@ -1,3 +1,4 @@
+import { getTerms } from '@/components/google-glossary/term/fetchers';
 import TermFormDrawer from '@/components/google-glossary/term/form-drawer';
 import TermTable from '@/components/google-glossary/term/table';
 import {
@@ -20,6 +21,14 @@ export default function GoogleGlossaryDetail() {
       <Container>
         <Heading textAlign="center">구글 용어집 상세</Heading>
         <Box>{name}</Box>
+        <Button
+          onClick={async () => {
+            const result = await getTerms(String(name));
+            console.log(result);
+          }}
+        >
+          용어 목록 받기
+        </Button>
         <Button onClick={onOpen}>양식 열기</Button>
         <Box mt="5">
           <TermTable />
