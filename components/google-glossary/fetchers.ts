@@ -1,9 +1,9 @@
-import { GoogleGlossary } from '@/types/models';
+import { MyGoogleGlossary } from '@/types/models';
 import { DataResponse } from '@/types/responses';
 import axios from 'axios';
 
 export async function getGlossaries() {
-  const res = await axios.get<DataResponse<GoogleGlossary[]>>(
+  const res = await axios.get<DataResponse<MyGoogleGlossary[]>>(
     '/api/google-glossaries'
   );
 

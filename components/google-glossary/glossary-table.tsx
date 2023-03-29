@@ -1,5 +1,5 @@
 import { getGlossaries } from '@/components/google-glossary/fetchers';
-import { GoogleGlossary } from '@/types/models';
+import { MyGoogleGlossary } from '@/types/models';
 import {
   Table,
   TableContainer,
@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import ButtonLink from '../button-link';
 
 export default function GlossaryTable() {
-  const [glossaries, setGlossaries] = useState<GoogleGlossary[]>([]);
+  const [glossaries, setGlossaries] = useState<MyGoogleGlossary[]>([]);
 
   useEffect(() => {
     getGlossaries().then((glossaries) => {
@@ -33,15 +33,15 @@ export default function GlossaryTable() {
         <Tbody>
           {glossaries.map((glossary) => {
             return (
-              <Tr key={glossary.displayName}>
+              <Tr key={glossary.name}>
                 <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
-                  {glossary.displayName}
+                  {glossary.name}
                 </Td>
                 <Td padding="0" textAlign="center">
                   <ButtonLink
                     text="보기"
                     size="sm"
-                    href={`/google-glossary/${glossary.displayName}`}
+                    href={`/google-glossary/${glossary.name}`}
                   />
                 </Td>
               </Tr>
