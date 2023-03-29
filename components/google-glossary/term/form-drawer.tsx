@@ -1,6 +1,4 @@
 import {
-  Button,
-  ButtonGroup,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -13,14 +11,20 @@ import {
   Input,
   VStack,
 } from '@chakra-ui/react';
+import { ReactNode } from 'react';
 
-export default function TermFormDrawer({ isOpen, onClose }: Props) {
+export default function TermFormDrawer({
+  isOpen,
+  headerText,
+  buttons,
+  onClose,
+}: Props) {
   return (
     <Drawer size="lg" isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>용어 양식</DrawerHeader>
+        <DrawerHeader>{headerText}</DrawerHeader>
 
         <DrawerBody>
           <form
@@ -43,14 +47,7 @@ export default function TermFormDrawer({ isOpen, onClose }: Props) {
           </form>
         </DrawerBody>
 
-        <DrawerFooter>
-          <ButtonGroup>
-            <Button colorScheme="red">삭제</Button>
-            <Button type="submit" form="my-form">
-              수정
-            </Button>
-          </ButtonGroup>
-        </DrawerFooter>
+        <DrawerFooter>{buttons}</DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
@@ -58,5 +55,7 @@ export default function TermFormDrawer({ isOpen, onClose }: Props) {
 
 interface Props {
   isOpen: boolean;
+  headerText: string;
+  buttons: ReactNode;
   onClose: () => void;
 }

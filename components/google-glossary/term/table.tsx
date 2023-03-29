@@ -10,7 +10,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-export default function TermTable({ terms }: Props) {
+export default function TermTable({ terms, onModifyButtonClick }: Props) {
   return (
     <TableContainer>
       <Table variant="simple">
@@ -18,7 +18,7 @@ export default function TermTable({ terms }: Props) {
           <Tr>
             <Th>영어</Th>
             <Th>한국어</Th>
-            <Th textAlign="center">양식</Th>
+            <Th textAlign="center">변경</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -32,7 +32,9 @@ export default function TermTable({ terms }: Props) {
                   {term.korean}
                 </Td>
                 <Td padding="0" textAlign="center">
-                  <Button size="sm">열기</Button>
+                  <Button size="sm" onClick={onModifyButtonClick}>
+                    열기
+                  </Button>
                 </Td>
               </Tr>
             );
@@ -45,4 +47,5 @@ export default function TermTable({ terms }: Props) {
 
 interface Props {
   terms: MyGoogleTerm[];
+  onModifyButtonClick: () => void;
 }
