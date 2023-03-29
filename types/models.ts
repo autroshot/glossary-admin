@@ -7,7 +7,7 @@ export interface MyGoogleTerm extends Term {
   path: string;
 }
 
-interface Term {
+export interface Term {
   english: string;
   korean: string;
 }
