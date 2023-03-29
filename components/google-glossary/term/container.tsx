@@ -31,15 +31,17 @@ export default function TermContainer() {
     });
   }, [glossaryName]);
 
-  const onSubmit: SubmitHandler<Term> = async (data) => {
+  const onSubmit: SubmitHandler<Term> = (data) => {
     if (typeof glossaryName !== 'string') return;
 
     if (mode === 'create') {
-      await createTerm(glossaryName, {
+      createTerm(glossaryName, {
         english: data.english,
         korean: data.korean,
+      }).then(() => {
+        onClose();
+        console.log('생성 완료!');
       });
-      console.log('생성 완료!');
     }
   };
 
