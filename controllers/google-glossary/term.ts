@@ -3,12 +3,11 @@ import { MyGoogleTerm } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const getTerms: Controller = async (req, res) => {
-  const displayName = req.query['display-name'];
+  const { name } = req.query;
 
   const client = createJWTClient();
-
   const googleAPIResponse = await client.request<GoogleAPIResponse>({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${displayName}/glossaryEntries`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${name}/glossaryEntries`,
   });
 
   const googleGlossaryEntries = googleAPIResponse.data.glossaryEntries;
