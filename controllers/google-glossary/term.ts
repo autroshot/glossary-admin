@@ -8,6 +8,7 @@ const getTerms: Controller = async (req, res) => {
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIResponse>({
     url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries`,
+    method: 'GET',
   });
 
   const googleGlossaryEntries = googleAPIResponse.data.glossaryEntries;

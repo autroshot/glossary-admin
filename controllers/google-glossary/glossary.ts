@@ -7,6 +7,7 @@ const getGlossaries: Controller = async (req, res) => {
 
   const googleAPIResponse = await client.request<GoogleAPIResponse>({
     url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries`,
+    method: 'GET',
   });
 
   const googleGlossaries = googleAPIResponse.data.glossaries;
