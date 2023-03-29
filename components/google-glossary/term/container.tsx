@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
 import { createTerm, deleteTerm, getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
@@ -30,20 +29,6 @@ export default function TermContainer() {
       setTerms(newTerms);
     });
   }, [glossaryName]);
-
-  const onSubmit: SubmitHandler<Term> = (data) => {
-    if (typeof glossaryName !== 'string') return;
-
-    if (mode === 'create') {
-      createTerm(glossaryName, {
-        english: data.english,
-        korean: data.korean,
-      }).then(() => {
-        onClose();
-        console.log('생성 완료!');
-      });
-    }
-  };
 
   return (
     <>
@@ -73,13 +58,25 @@ export default function TermContainer() {
     setMode('create');
     onOpen();
   }
-
   function handleModifyButtonClick(term: MyGoogleTerm) {
     setSelectedTerm(term);
     setMode('update');
     onOpen();
   }
 
+  function onSubmit(data: Term): unknown | Promise<unknown> {
+    if (typeof glossaryName !== 'string') return;
+
+    if (mode === 'create') {
+      createTerm(glossaryName, {
+        english: data.english,
+        korean: data.korean,
+      }).then(() => {
+        onClose();
+        console.log('생성 완료!');
+      });
+    }
+  }
   function handleDeleteButtonClick() {
     if (typeof glossaryName !== 'string') return;
     if (!selectedTerm) return;
