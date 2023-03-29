@@ -1,3 +1,30 @@
-import { protos } from '@google-cloud/translate';
+export interface Glossary {
+  name: string;
+  inputConfig: {
+    gcsSource: {
+      inputUri: string;
+    };
+  };
+  entryCount: number;
+  submitTime: string;
+  endTime: string;
+  displayName: string;
+  languagePair: {
+    sourceLanguageCode: string;
+    targetLanguageCode: string;
+  };
+}
 
-export type Glossary = protos.google.cloud.translation.v3.IGlossary;
+export interface GlossaryEntry {
+  name: string;
+  description: string;
+  termsPair: {
+    sourceTerm: GlossaryTerm;
+    targetTerm: GlossaryTerm;
+  };
+}
+
+interface GlossaryTerm {
+  languageCode: string;
+  text: string;
+}
