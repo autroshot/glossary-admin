@@ -14,16 +14,16 @@ export default function TermContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
-  const { name } = router.query;
+  const glossaryName = router.query['glossary-name'];
 
   return (
     <>
       <Container>
         <Heading textAlign="center">구글 용어집 상세</Heading>
-        <Box>{name}</Box>
+        <Box>{glossaryName}</Box>
         <Button
           onClick={async () => {
-            const result = await getTerms(String(name));
+            const result = await getTerms(String(glossaryName));
             console.log(result);
           }}
         >
