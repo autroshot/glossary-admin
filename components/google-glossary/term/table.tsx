@@ -1,3 +1,4 @@
+import { MyGoogleTerm } from '@/types/models';
 import {
   Button,
   Table,
@@ -9,7 +10,7 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-export default function TermTable() {
+export default function TermTable({ terms }: Props) {
   return (
     <TableContainer>
       <Table variant="simple">
@@ -21,41 +22,27 @@ export default function TermTable() {
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              english
-            </Td>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              영어
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">열기</Button>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              english
-            </Td>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              영어
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">열기</Button>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              englishenglishenglishenglishenglishenglishenglish
-            </Td>
-            <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-              영어영어영어영어영어영어영어영어영어영어영어영어영어영어
-            </Td>
-            <Td padding="0" textAlign="center">
-              <Button size="sm">열기</Button>
-            </Td>
-          </Tr>
+          {terms.map((term) => {
+            return (
+              <Tr key={term.english}>
+                <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
+                  {term.english}
+                </Td>
+                <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
+                  {term.korean}
+                </Td>
+                <Td padding="0" textAlign="center">
+                  <Button size="sm">열기</Button>
+                </Td>
+              </Tr>
+            );
+          })}
         </Tbody>
       </Table>
     </TableContainer>
   );
+}
+
+interface Props {
+  terms: MyGoogleTerm[];
 }

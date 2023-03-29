@@ -1,3 +1,4 @@
+import { MyGoogleTerm } from '@/types/models';
 import {
   Box,
   Button,
@@ -6,32 +7,32 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
 export default function TermContainer() {
+  const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
   const glossaryName = router.query['glossary-name'];
 
+  useEffect(() => {
+    getTerms(String(glossaryName)).then((newTerms) => {
+      setTerms(newTerms);
+    });
+  }, [glossaryName]);
+
   return (
     <>
       <Container>
         <Heading textAlign="center">구글 용어집 상세</Heading>
-        <Box>{glossaryName}</Box>
-        <Button
-          onClick={async () => {
-            const result = await getTerms(String(glossaryName));
-            console.log(result);
-          }}
-        >
-          용어 목록 받기
-        </Button>
         <Button onClick={onOpen}>양식 열기</Button>
         <Box mt="5">
-          <TermTable />
+          <TermTable terms={terms} />
         </Box>
       </Container>
       <TermFormDrawer isOpen={isOpen} onClose={onClose} />
