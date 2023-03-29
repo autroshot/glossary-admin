@@ -13,13 +13,13 @@ export default function GoogleGlossaryDetail() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const router = useRouter();
-  const displayName = router.query['display-name'];
+  const { name } = router.query;
 
   return (
     <>
       <Container>
         <Heading textAlign="center">구글 용어집 상세</Heading>
-        <Box>{displayName}</Box>
+        <Box>{name}</Box>
         <Button onClick={onOpen}>양식 열기</Button>
         <Box mt="5">
           <TermTable />
