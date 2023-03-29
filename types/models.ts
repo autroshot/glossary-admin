@@ -4,7 +4,7 @@ export interface MyGoogleGlossary {
 }
 
 export interface MyGoogleTerm extends Term {
-  path: string;
+  index: string;
 }
 
 export interface Term {

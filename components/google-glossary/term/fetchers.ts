@@ -18,3 +18,14 @@ export async function getTerms(glossaryName: MyGoogleGlossary['name']) {
 
   return res.data.data;
 }
+
+export async function deleteTerm(
+  glossaryName: MyGoogleGlossary['name'],
+  termIndex: MyGoogleTerm['index']
+): Promise<void> {
+  await axios.delete(
+    `/api/google-glossaries/${glossaryName}/terms/${termIndex}`
+  );
+
+  return;
+}

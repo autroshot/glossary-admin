@@ -10,28 +10,28 @@ import {
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { createTerm, getTerms } from './fetchers';
+import { createTerm, deleteTerm, getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
 export default function TermContainer() {
   const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
+  const [selectedTerm, setSelectedTerm] = useState<MyGoogleTerm>();
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
+  const glossaryName = router.query['glossary-name'];
 
   useEffect(() => {
-    const glossaryName = router.query['glossary-name'];
     if (typeof glossaryName !== 'string') return;
 
     getTerms(glossaryName).then((newTerms) => {
       setTerms(newTerms);
     });
-  }, [router]);
+  }, [glossaryName]);
 
   const onSubmit: SubmitHandler<Term> = async (data) => {
-    const glossaryName = router.query['glossary-name'];
     if (typeof glossaryName !== 'string') return;
 
     if (mode === 'create') {
@@ -72,9 +72,20 @@ export default function TermContainer() {
     onOpen();
   }
 
-  function handleModifyButtonClick() {
+  function handleModifyButtonClick(term: MyGoogleTerm) {
+    setSelectedTerm(term);
     setMode('update');
     onOpen();
+  }
+
+  function handleDeleteButtonClick() {
+    if (typeof glossaryName !== 'string') return;
+    if (!selectedTerm) return;
+
+    onClose();
+    deleteTerm(glossaryName, selectedTerm.index).then(() => {
+      console.log('삭제 완료!');
+    });
   }
 
   function createFormDrawerHeaderText(): string {
@@ -91,7 +102,9 @@ export default function TermContainer() {
     }
     return (
       <ButtonGroup>
-        <Button colorScheme="red">삭제</Button>
+        <Button colorScheme="red" onClick={handleDeleteButtonClick}>
+          삭제
+        </Button>
         <Button type="submit" form="my-form">
           수정
         </Button>

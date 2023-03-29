@@ -1,5 +1,5 @@
 import { Controller } from '@/types/controller';
-import { MyGoogleTerm, Term } from '@/types/models';
+import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const createTerm: Controller = async (req, res) => {
@@ -44,11 +44,29 @@ const getTerms: Controller = async (req, res) => {
     googleGlossaryEntry: GoogleGlossaryEntry
   ): MyGoogleTerm {
     return {
-      path: googleGlossaryEntry.name,
+      index: getTermIndex(googleGlossaryEntry.name),
       english: googleGlossaryEntry.termsPair.sourceTerm.text,
       korean: googleGlossaryEntry.termsPair.targetTerm.text,
     };
   }
+
+  function getTermIndex(name: GoogleGlossaryEntry['name']): string {
+    const array = name.split('/');
+    return array[array.length - 1];
+  }
+};
+
+const deleteTerm: Controller = async (req, res) => {
+  const glossaryName = req.query['glossary-name'] as MyGoogleGlossary['name'];
+  const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
+
+  const client = createJWTClient();
+  await client.request({
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries/${termIndex}`,
+    method: 'DELETE',
+  });
+
+  return res.status(200).end();
 };
 
 type PostRequestBody = Pick<GoogleGlossaryEntry, 'termsPair'>;
@@ -74,4 +92,4 @@ interface GoogleAPIGetListResponse {
 
 type GoogleAPICreateResponse = GoogleGlossaryEntry;
 
-export { createTerm, getTerms };
+export { createTerm, getTerms, deleteTerm };

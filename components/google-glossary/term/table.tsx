@@ -32,7 +32,7 @@ export default function TermTable({ terms, onModifyButtonClick }: Props) {
                   {term.korean}
                 </Td>
                 <Td padding="0" textAlign="center">
-                  <Button size="sm" onClick={onModifyButtonClick}>
+                  <Button size="sm" onClick={() => onModifyButtonClick(term)}>
                     열기
                   </Button>
                 </Td>
@@ -47,5 +47,5 @@ export default function TermTable({ terms, onModifyButtonClick }: Props) {
 
 interface Props {
   terms: MyGoogleTerm[];
-  onModifyButtonClick: () => void;
+  onModifyButtonClick: (term: MyGoogleTerm) => void;
 }
