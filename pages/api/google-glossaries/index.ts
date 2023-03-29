@@ -1,4 +1,4 @@
-import { getGlossaries } from '@/controllers/google-glossary';
+import { getGlossaries } from '@/controllers/google-glossary/glossary';
 import { controllerSwitch } from '@/utils/api';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
