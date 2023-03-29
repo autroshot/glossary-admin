@@ -1,4 +1,4 @@
-import { MyGoogleTerm } from '@/types/models';
+import { MyGoogleTerm, Term } from '@/types/models';
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
+import { SubmitHandler } from 'react-hook-form';
 import { getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
@@ -29,6 +30,10 @@ export default function TermContainer() {
     });
   }, [router]);
 
+  const onSubmit: SubmitHandler<Term> = (data) => {
+    console.log(data);
+  };
+
   return (
     <>
       <Container maxW="container.sm" mb="10">
@@ -45,9 +50,10 @@ export default function TermContainer() {
       </Container>
       <TermFormDrawer
         isOpen={isOpen}
-        onClose={onClose}
         headerText={createFormDrawerHeaderText()}
         buttons={createFormDrawerButtons()}
+        onClose={onClose}
+        onSubmit={onSubmit}
       />
     </>
   );
