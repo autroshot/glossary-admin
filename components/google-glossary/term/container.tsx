@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
-import { getTerms } from './fetchers';
+import { createTerm, getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
@@ -30,8 +30,17 @@ export default function TermContainer() {
     });
   }, [router]);
 
-  const onSubmit: SubmitHandler<Term> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<Term> = async (data) => {
+    const glossaryName = router.query['glossary-name'];
+    if (typeof glossaryName !== 'string') return;
+
+    if (mode === 'create') {
+      await createTerm(glossaryName, {
+        english: data.english,
+        korean: data.korean,
+      });
+      console.log('생성 완료!');
+    }
   };
 
   return (
