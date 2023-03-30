@@ -3,12 +3,12 @@ import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const createTerm: Controller = async (req, res) => {
-  const glossaryName = req.query['glossary-name'];
+  const glossaryId = req.query['glossary-id'];
   const receivedBody = req.body as Term;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPICreateResponse>({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries`,
     method: 'POST',
     data: toRequestBody(receivedBody),
   });
@@ -18,11 +18,11 @@ const createTerm: Controller = async (req, res) => {
 };
 
 const getTerms: Controller = async (req, res) => {
-  const glossaryName = req.query['glossary-name'];
+  const glossaryId = req.query['glossary-id'];
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIGetListResponse>({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries`,
     method: 'GET',
   });
 
@@ -48,13 +48,13 @@ const getTerms: Controller = async (req, res) => {
 };
 
 const updateTerm: Controller = async (req, res) => {
-  const glossaryName = req.query['glossary-name'] as MyGoogleGlossary['name'];
+  const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
   const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
   const receivedBody = req.body as Term;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIUpdateResponse>({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries/${termIndex}`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termIndex}`,
     method: 'PATCH',
     data: toRequestBody(receivedBody),
   });
@@ -64,12 +64,12 @@ const updateTerm: Controller = async (req, res) => {
 };
 
 const deleteTerm: Controller = async (req, res) => {
-  const glossaryName = req.query['glossary-name'] as MyGoogleGlossary['name'];
+  const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
   const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
 
   const client = createJWTClient();
   await client.request({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries/${termIndex}`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termIndex}`,
     method: 'DELETE',
   });
 

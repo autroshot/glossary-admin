@@ -20,15 +20,15 @@ export default function TermContainer() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-  const glossaryName = router.query['glossary-name'];
+  const glossaryId = router.query['glossary-id'];
 
   useEffect(() => {
-    if (typeof glossaryName !== 'string') return;
+    if (typeof glossaryId !== 'string') return;
 
-    getTerms(glossaryName).then((newTerms) => {
+    getTerms(glossaryId).then((newTerms) => {
       setTerms(newTerms);
     });
-  }, [glossaryName]);
+  }, [glossaryId]);
 
   const form = useForm<MyGoogleTerm>();
   const { getValues, setValue } = form;
@@ -74,10 +74,10 @@ export default function TermContainer() {
   }
 
   function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
-    if (typeof glossaryName !== 'string') return;
+    if (typeof glossaryId !== 'string') return;
 
     if (mode === 'create') {
-      createTerm(glossaryName, {
+      createTerm(glossaryId, {
         english: data.english,
         korean: data.korean,
       }).then(() => {
@@ -87,10 +87,10 @@ export default function TermContainer() {
     }
   }
   function handleDeleteButtonClick() {
-    if (typeof glossaryName !== 'string') return;
+    if (typeof glossaryId !== 'string') return;
 
     onClose();
-    deleteTerm(glossaryName, getValues('index')).then(() => {
+    deleteTerm(glossaryId, getValues('index')).then(() => {
       console.log('삭제 완료!');
     });
   }

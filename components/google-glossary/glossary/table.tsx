@@ -33,15 +33,15 @@ export default function GlossaryTable() {
         <Tbody>
           {glossaries.map((glossary) => {
             return (
-              <Tr key={glossary.name}>
+              <Tr key={glossary.id}>
                 <Td maxW="20rem" overflow="hidden" textOverflow="ellipsis">
-                  {glossary.name}
+                  {glossary.id}
                 </Td>
                 <Td padding="0" textAlign="center">
                   <ButtonLink
                     text="보기"
                     size="sm"
-                    href={`/google-glossary/${glossary.name}`}
+                    href={`/google-glossary/${glossary.id}`}
                   />
                 </Td>
               </Tr>

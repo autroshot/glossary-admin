@@ -1,6 +1,5 @@
 export interface MyGoogleGlossary {
-  path: string;
-  name: string;
+  id: string;
 }
 
 export interface MyGoogleTerm extends Term {

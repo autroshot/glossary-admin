@@ -18,7 +18,7 @@ const getGlossaries: Controller = async (req, res) => {
   function toMyGoogleGlossary(
     googleGlossary: GoogleGlossary
   ): MyGoogleGlossary {
-    return { path: googleGlossary.name, name: googleGlossary.displayName };
+    return { id: googleGlossary.displayName };
   }
 };
 

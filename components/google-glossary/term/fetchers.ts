@@ -3,29 +3,27 @@ import { DataResponse } from '@/types/responses';
 import axios from 'axios';
 
 export async function createTerm(
-  glossaryName: MyGoogleGlossary['name'],
+  glossaryId: MyGoogleGlossary['id'],
   term: Term
 ): Promise<void> {
-  await axios.post(`/api/google-glossaries/${glossaryName}/terms`, term);
+  await axios.post(`/api/google-glossaries/${glossaryId}/terms`, term);
 
   return;
 }
 
-export async function getTerms(glossaryName: MyGoogleGlossary['name']) {
+export async function getTerms(glossaryId: MyGoogleGlossary['id']) {
   const res = await axios.get<DataResponse<MyGoogleTerm[]>>(
-    `/api/google-glossaries/${glossaryName}/terms`
+    `/api/google-glossaries/${glossaryId}/terms`
   );
 
   return res.data.data;
 }
 
 export async function deleteTerm(
-  glossaryName: MyGoogleGlossary['name'],
+  glossaryId: MyGoogleGlossary['id'],
   termIndex: MyGoogleTerm['index']
 ): Promise<void> {
-  await axios.delete(
-    `/api/google-glossaries/${glossaryName}/terms/${termIndex}`
-  );
+  await axios.delete(`/api/google-glossaries/${glossaryId}/terms/${termIndex}`);
 
   return;
 }
