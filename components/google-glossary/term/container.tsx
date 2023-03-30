@@ -6,6 +6,7 @@ import {
   Container,
   Heading,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
@@ -18,6 +19,7 @@ export default function TermContainer() {
   const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
+  const toast = useToast();
   const {
     isOpen: isDrawerOpen,
     onOpen: onDrawerOpen,
@@ -90,7 +92,7 @@ export default function TermContainer() {
         korean,
       }).then(() => {
         onDrawerClose();
-        console.log('생성 완료!');
+        toast({ title: '용어가 생성되었습니다.', status: 'success' });
       });
 
       return;
@@ -98,15 +100,15 @@ export default function TermContainer() {
 
     updateTerm(glossaryId, termId, { english, korean }).then(() => {
       onDrawerClose();
-      console.log('갱신 완료!');
+      toast({ title: '용어가 갱신되었습니다.', status: 'success' });
     });
   }
   function handleDeleteButtonClick() {
     if (typeof glossaryId !== 'string') return;
 
-    onDrawerClose();
     deleteTerm(glossaryId, getValues('id')).then(() => {
-      console.log('삭제 완료!');
+      onDrawerClose();
+      toast({ title: '용어가 삭제되었습니다.', status: 'success' });
     });
   }
 
