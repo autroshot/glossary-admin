@@ -1,4 +1,4 @@
-import { MyGoogleTerm } from '@/types/models';
+import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
 import {
   Box,
   Button,
@@ -8,16 +8,66 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
 export default function TermContainer() {
-  const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
   const [mode, setMode] = useState<'create' | 'update'>('create');
+
+  const router = useRouter();
+  const glossaryId = router.query['glossary-id'];
+
+  const query = useQuery<MyGoogleTerm[]>({
+    queryKey: ['google', 'glossaries', glossaryId],
+    queryFn: () => {
+      if (typeof glossaryId !== 'string') return [];
+      return getTerms(glossaryId);
+    },
+  });
+
+  const queryClient = useQueryClient();
+  const createMutation = useMutation<void, AxiosError, CreateMutationFnParam>({
+    mutationFn: async ({ glossaryId, term }) => {
+      return createTerm(glossaryId, term);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['google', 'glossaries', glossaryId],
+      });
+      onDrawerClose();
+      toast({ title: '용어가 생성되었습니다.', status: 'success' });
+    },
+  });
+  const updateMutation = useMutation<void, AxiosError, UpdateMutationFnParam>({
+    mutationFn: async ({ glossaryId, termId, term }) => {
+      return updateTerm(glossaryId, termId, term);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['google', 'glossaries', glossaryId],
+      });
+      onDrawerClose();
+      toast({ title: '용어가 갱신되었습니다.', status: 'success' });
+    },
+  });
+  const deleteMutation = useMutation<void, AxiosError, DeleteMutationFnParam>({
+    mutationFn: async ({ glossaryId, termId }) => {
+      return deleteTerm(glossaryId, termId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['google', 'glossaries', glossaryId],
+      });
+      onDrawerClose();
+      toast({ title: '용어가 삭제되었습니다.', status: 'success' });
+    },
+  });
 
   const toast = useToast();
   const {
@@ -25,16 +75,6 @@ export default function TermContainer() {
     onOpen: onDrawerOpen,
     onClose: onDrawerClose,
   } = useDisclosure();
-  const router = useRouter();
-  const glossaryId = router.query['glossary-id'];
-
-  useEffect(() => {
-    if (typeof glossaryId !== 'string') return;
-
-    getTerms(glossaryId).then((newTerms) => {
-      setTerms(newTerms);
-    });
-  }, [glossaryId]);
 
   const form = useForm<MyGoogleTerm>();
   const { getValues, setValue } = form;
@@ -48,7 +88,7 @@ export default function TermContainer() {
         </Box>
         <Box mt="5">
           <TermTable
-            terms={terms}
+            terms={query.data ?? []}
             onModifyButtonClick={handleModifyButtonClick}
           />
         </Box>
@@ -87,29 +127,19 @@ export default function TermContainer() {
     const korean = data.korean;
 
     if (mode === 'create') {
-      createTerm(glossaryId, {
-        english,
-        korean,
-      }).then(() => {
-        onDrawerClose();
-        toast({ title: '용어가 생성되었습니다.', status: 'success' });
-      });
+      createMutation.mutate({ glossaryId, term: { english, korean } });
 
       return;
     }
 
-    updateTerm(glossaryId, termId, { english, korean }).then(() => {
-      onDrawerClose();
-      toast({ title: '용어가 갱신되었습니다.', status: 'success' });
-    });
+    updateMutation.mutate({ glossaryId, termId, term: { english, korean } });
+
+    return;
   }
   function handleDeleteButtonClick() {
     if (typeof glossaryId !== 'string') return;
 
-    deleteTerm(glossaryId, getValues('id')).then(() => {
-      onDrawerClose();
-      toast({ title: '용어가 삭제되었습니다.', status: 'success' });
-    });
+    deleteMutation.mutate({ glossaryId, termId: getValues('id') });
   }
 
   function createFormDrawerHeaderText(): string {
@@ -134,5 +164,19 @@ export default function TermContainer() {
         </Button>
       </ButtonGroup>
     );
+  }
+
+  interface CreateMutationFnParam {
+    glossaryId: MyGoogleGlossary['id'];
+    term: Term;
+  }
+  interface UpdateMutationFnParam {
+    glossaryId: MyGoogleGlossary['id'];
+    termId: MyGoogleTerm['id'];
+    term: Term;
+  }
+  interface DeleteMutationFnParam {
+    glossaryId: MyGoogleGlossary['id'];
+    termId: MyGoogleTerm['id'];
   }
 }
