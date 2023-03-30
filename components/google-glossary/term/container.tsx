@@ -23,7 +23,7 @@ export default function TermContainer() {
   const router = useRouter();
   const glossaryId = router.query['glossary-id'];
 
-  const query = useQuery<MyGoogleTerm[]>({
+  const { data: terms, isLoading: isTermsLoading } = useQuery<MyGoogleTerm[]>({
     queryKey: ['google', 'glossaries', glossaryId],
     queryFn: () => {
       if (typeof glossaryId !== 'string') return [];
@@ -88,7 +88,8 @@ export default function TermContainer() {
         </Box>
         <Box mt="5">
           <TermTable
-            terms={query.data ?? []}
+            terms={terms ?? []}
+            isLoading={isTermsLoading}
             onModifyButtonClick={handleModifyButtonClick}
           />
         </Box>
@@ -103,6 +104,14 @@ export default function TermContainer() {
       />
     </>
   );
+
+  function getIsProcessing(): boolean {
+    return (
+      createMutation.isLoading ||
+      updateMutation.isLoading ||
+      deleteMutation.isLoading
+    );
+  }
 
   function handleCreateButtonClick() {
     setMode('create');
@@ -149,17 +158,21 @@ export default function TermContainer() {
   function createFormDrawerButtons(): ReactNode {
     if (mode === 'create') {
       return (
-        <Button type="submit" form="drawer-form">
+        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
           생성
         </Button>
       );
     }
     return (
       <ButtonGroup>
-        <Button colorScheme="red" onClick={handleDeleteButtonClick}>
+        <Button
+          colorScheme="red"
+          isLoading={getIsProcessing()}
+          onClick={handleDeleteButtonClick}
+        >
           삭제
         </Button>
-        <Button type="submit" form="drawer-form">
+        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
           수정
         </Button>
       </ButtonGroup>
