@@ -1,12 +1,12 @@
-// https://cloud.google.com/translate/docs/reference/rest/v3/projects.locations.glossaries
+// 기존 리소스 - https://cloud.google.com/translate/docs/reference/rest/v3/projects.locations.glossaries
 export interface MyGoogleGlossary {
-  // displayName
+  // 기존 리소스의 displayName
   id: string;
 }
 
-// https://cloud.google.com/translate/docs/reference/rest/v3/projects.locations.glossaries.glossaryEntries
+// 기존 리소스 - https://cloud.google.com/translate/docs/reference/rest/v3/projects.locations.glossaries.glossaryEntries
 export interface MyGoogleTerm extends Term {
-  // name에서 마지막 / 뒤의 문자열
+  // 기존 리소스의 name에서 마지막 / 뒤의 문자열
   index: string;
 }
 
