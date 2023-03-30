@@ -19,6 +19,16 @@ export async function getTerms(glossaryId: MyGoogleGlossary['id']) {
   return res.data.data;
 }
 
+export async function updateTerm(
+  glossaryId: MyGoogleGlossary['id'],
+  termId: MyGoogleTerm['id'],
+  term: Term
+): Promise<void> {
+  await axios.put(`/api/google-glossaries/${glossaryId}/terms/${termId}`, term);
+
+  return;
+}
+
 export async function deleteTerm(
   glossaryId: MyGoogleGlossary['id'],
   termId: MyGoogleTerm['id']

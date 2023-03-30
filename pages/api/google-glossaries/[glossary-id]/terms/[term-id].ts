@@ -1,4 +1,4 @@
-import { deleteTerm } from '@/controllers/google-glossary/term';
+import { deleteTerm, updateTerm } from '@/controllers/google-glossary/term';
 import { controllerSwitch } from '@/utils/api';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,6 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await controllerSwitch(req, res, {
+    PUTController: updateTerm,
     DELETEController: deleteTerm,
   });
 }

@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createTerm, deleteTerm, getTerms } from './fetchers';
+import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
@@ -76,15 +76,26 @@ export default function TermContainer() {
   function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
     if (typeof glossaryId !== 'string') return;
 
+    const termId = data.id;
+    const english = data.english;
+    const korean = data.korean;
+
     if (mode === 'create') {
       createTerm(glossaryId, {
-        english: data.english,
-        korean: data.korean,
+        english,
+        korean,
       }).then(() => {
         onClose();
         console.log('생성 완료!');
       });
+
+      return;
     }
+
+    updateTerm(glossaryId, termId, { english, korean }).then(() => {
+      onClose();
+      console.log('갱신 완료!');
+    });
   }
   function handleDeleteButtonClick() {
     if (typeof glossaryId !== 'string') return;
