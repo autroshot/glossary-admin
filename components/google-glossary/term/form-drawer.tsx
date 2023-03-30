@@ -1,4 +1,4 @@
-import { Term } from '@/types/models';
+import { MyGoogleTerm } from '@/types/models';
 import {
   Drawer,
   DrawerBody,
@@ -14,9 +14,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, UseFormReturn } from 'react-hook-form';
 
 export default function TermFormDrawer({
+  form,
   isOpen,
   headerText,
   buttons,
@@ -27,7 +28,7 @@ export default function TermFormDrawer({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Term>();
+  } = form;
 
   return (
     <Drawer size="lg" isOpen={isOpen} onClose={onClose}>
@@ -55,6 +56,7 @@ export default function TermFormDrawer({
                   <FormErrorMessage>{errors.korean?.message}</FormErrorMessage>
                 ) : null}
               </FormControl>
+              <Input type="hidden" {...register('index')} />
             </VStack>
           </form>
         </DrawerBody>
@@ -66,9 +68,10 @@ export default function TermFormDrawer({
 }
 
 interface Props {
+  form: UseFormReturn<MyGoogleTerm>;
   isOpen: boolean;
   headerText: string;
   buttons: ReactNode;
   onClose: () => void;
-  onSubmit: SubmitHandler<Term>;
+  onSubmit: SubmitHandler<MyGoogleTerm>;
 }

@@ -1,4 +1,4 @@
-import { MyGoogleTerm, Term } from '@/types/models';
+import { MyGoogleTerm } from '@/types/models';
 import {
   Box,
   Button,
@@ -9,13 +9,13 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ReactNode, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { createTerm, deleteTerm, getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
 export default function TermContainer() {
   const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
-  const [selectedTerm, setSelectedTerm] = useState<MyGoogleTerm>();
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,6 +29,9 @@ export default function TermContainer() {
       setTerms(newTerms);
     });
   }, [glossaryName]);
+
+  const form = useForm<MyGoogleTerm>();
+  const { getValues, setValue } = form;
 
   return (
     <>
@@ -45,6 +48,7 @@ export default function TermContainer() {
         </Box>
       </Container>
       <TermFormDrawer
+        form={form}
         isOpen={isOpen}
         headerText={createFormDrawerHeaderText()}
         buttons={createFormDrawerButtons()}
@@ -56,15 +60,20 @@ export default function TermContainer() {
 
   function handleCreateButtonClick() {
     setMode('create');
+    setValue('index', '');
+    setValue('english', '');
+    setValue('korean', '');
     onOpen();
   }
   function handleModifyButtonClick(term: MyGoogleTerm) {
-    setSelectedTerm(term);
     setMode('update');
+    setValue('index', term.index);
+    setValue('english', term.english);
+    setValue('korean', term.korean);
     onOpen();
   }
 
-  function onSubmit(data: Term): unknown | Promise<unknown> {
+  function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
     if (typeof glossaryName !== 'string') return;
 
     if (mode === 'create') {
@@ -79,10 +88,9 @@ export default function TermContainer() {
   }
   function handleDeleteButtonClick() {
     if (typeof glossaryName !== 'string') return;
-    if (!selectedTerm) return;
 
     onClose();
-    deleteTerm(glossaryName, selectedTerm.index).then(() => {
+    deleteTerm(glossaryName, getValues('index')).then(() => {
       console.log('삭제 완료!');
     });
   }
