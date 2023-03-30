@@ -60,14 +60,14 @@ export default function TermContainer() {
 
   function handleCreateButtonClick() {
     setMode('create');
-    setValue('index', '');
+    setValue('id', '');
     setValue('english', '');
     setValue('korean', '');
     onOpen();
   }
   function handleModifyButtonClick(term: MyGoogleTerm) {
     setMode('update');
-    setValue('index', term.index);
+    setValue('id', term.id);
     setValue('english', term.english);
     setValue('korean', term.korean);
     onOpen();
@@ -90,7 +90,7 @@ export default function TermContainer() {
     if (typeof glossaryId !== 'string') return;
 
     onClose();
-    deleteTerm(glossaryId, getValues('index')).then(() => {
+    deleteTerm(glossaryId, getValues('id')).then(() => {
       console.log('삭제 완료!');
     });
   }

@@ -56,7 +56,7 @@ export default function TermFormDrawer({
                   <FormErrorMessage>{errors.korean?.message}</FormErrorMessage>
                 ) : null}
               </FormControl>
-              <Input type="hidden" {...register('index')} />
+              <Input type="hidden" {...register('id')} />
             </VStack>
           </form>
         </DrawerBody>

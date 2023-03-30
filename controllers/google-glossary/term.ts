@@ -35,13 +35,13 @@ const getTerms: Controller = async (req, res) => {
     googleGlossaryEntry: GoogleGlossaryEntry
   ): MyGoogleTerm {
     return {
-      index: getTermIndex(googleGlossaryEntry.name),
+      id: getTermId(googleGlossaryEntry.name),
       english: googleGlossaryEntry.termsPair.sourceTerm.text,
       korean: googleGlossaryEntry.termsPair.targetTerm.text,
     };
   }
 
-  function getTermIndex(name: GoogleGlossaryEntry['name']): string {
+  function getTermId(name: GoogleGlossaryEntry['name']): string {
     const array = name.split('/');
     return array[array.length - 1];
   }
@@ -49,12 +49,12 @@ const getTerms: Controller = async (req, res) => {
 
 const updateTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
-  const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
+  const termId = req.query['term-id'] as MyGoogleTerm['id'];
   const receivedBody = req.body as Term;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIUpdateResponse>({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termIndex}`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termId}`,
     method: 'PATCH',
     data: toRequestBody(receivedBody),
   });
@@ -65,11 +65,11 @@ const updateTerm: Controller = async (req, res) => {
 
 const deleteTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
-  const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
+  const termId = req.query['term-id'] as MyGoogleTerm['id'];
 
   const client = createJWTClient();
   await client.request({
-    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termIndex}`,
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryId}/glossaryEntries/${termId}`,
     method: 'DELETE',
   });
 

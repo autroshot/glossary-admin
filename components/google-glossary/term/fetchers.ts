@@ -21,9 +21,9 @@ export async function getTerms(glossaryId: MyGoogleGlossary['id']) {
 
 export async function deleteTerm(
   glossaryId: MyGoogleGlossary['id'],
-  termIndex: MyGoogleTerm['index']
+  termId: MyGoogleTerm['id']
 ): Promise<void> {
-  await axios.delete(`/api/google-glossaries/${glossaryId}/terms/${termIndex}`);
+  await axios.delete(`/api/google-glossaries/${glossaryId}/terms/${termId}`);
 
   return;
 }
