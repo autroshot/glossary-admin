@@ -38,7 +38,7 @@ export default function TermFormDrawer({
         <DrawerHeader>{headerText}</DrawerHeader>
 
         <DrawerBody>
-          <form id="my-form" onSubmit={handleSubmit(onSubmit)}>
+          <form id="drawer-form" onSubmit={handleSubmit(onSubmit)}>
             <VStack>
               <FormControl isInvalid={Boolean(errors.english)}>
                 <FormLabel>영어</FormLabel>

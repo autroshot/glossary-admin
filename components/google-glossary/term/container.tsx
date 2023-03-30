@@ -102,7 +102,7 @@ export default function TermContainer() {
   function createFormDrawerButtons(): ReactNode {
     if (mode === 'create') {
       return (
-        <Button type="submit" form="my-form">
+        <Button type="submit" form="drawer-form">
           생성
         </Button>
       );
@@ -112,7 +112,7 @@ export default function TermContainer() {
         <Button colorScheme="red" onClick={handleDeleteButtonClick}>
           삭제
         </Button>
-        <Button type="submit" form="my-form">
+        <Button type="submit" form="drawer-form">
           수정
         </Button>
       </ButtonGroup>
