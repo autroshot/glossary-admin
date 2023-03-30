@@ -10,20 +10,11 @@ const createTerm: Controller = async (req, res) => {
   const googleAPIResponse = await client.request<GoogleAPICreateResponse>({
     url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries`,
     method: 'POST',
-    data: toPostRequestBody(receivedBody),
+    data: toRequestBody(receivedBody),
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
   return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
-
-  function toPostRequestBody(receivedBody: Term): PostRequestBody {
-    return {
-      termsPair: {
-        sourceTerm: { languageCode: 'en', text: receivedBody.english },
-        targetTerm: { languageCode: 'ko', text: receivedBody.korean },
-      },
-    };
-  }
 };
 
 const getTerms: Controller = async (req, res) => {
@@ -56,6 +47,22 @@ const getTerms: Controller = async (req, res) => {
   }
 };
 
+const updateTerm: Controller = async (req, res) => {
+  const glossaryName = req.query['glossary-name'] as MyGoogleGlossary['name'];
+  const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
+  const receivedBody = req.body as Term;
+
+  const client = createJWTClient();
+  const googleAPIResponse = await client.request<GoogleAPIUpdateResponse>({
+    url: `https://translate.googleapis.com/v3/projects/${process.env.GOOGLE_PROJECT_NUMBER}/locations/us-central1/glossaries/${glossaryName}/glossaryEntries/${termIndex}`,
+    method: 'PATCH',
+    data: toRequestBody(receivedBody),
+  });
+
+  if (googleAPIResponse.data) return res.status(200).end();
+  return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
+};
+
 const deleteTerm: Controller = async (req, res) => {
   const glossaryName = req.query['glossary-name'] as MyGoogleGlossary['name'];
   const termIndex = req.query['term-index'] as MyGoogleTerm['index'];
@@ -86,10 +93,19 @@ interface GoogleGlossaryEntry {
   };
 }
 
+function toRequestBody(receivedBody: Term): PostRequestBody {
+  return {
+    termsPair: {
+      sourceTerm: { languageCode: 'en', text: receivedBody.english },
+      targetTerm: { languageCode: 'ko', text: receivedBody.korean },
+    },
+  };
+}
+
 interface GoogleAPIGetListResponse {
   glossaryEntries: GoogleGlossaryEntry[];
 }
-
 type GoogleAPICreateResponse = GoogleGlossaryEntry;
+type GoogleAPIUpdateResponse = GoogleGlossaryEntry;
 
-export { createTerm, getTerms, deleteTerm };
+export { createTerm, getTerms, updateTerm, deleteTerm };
