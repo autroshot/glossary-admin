@@ -18,7 +18,11 @@ export default function TermContainer() {
   const [terms, setTerms] = useState<MyGoogleTerm[]>([]);
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: onDrawerOpen,
+    onClose: onDrawerClose,
+  } = useDisclosure();
   const router = useRouter();
   const glossaryId = router.query['glossary-id'];
 
@@ -49,10 +53,10 @@ export default function TermContainer() {
       </Container>
       <TermFormDrawer
         form={form}
-        isOpen={isOpen}
+        isOpen={isDrawerOpen}
         headerText={createFormDrawerHeaderText()}
         buttons={createFormDrawerButtons()}
-        onClose={onClose}
+        onClose={onDrawerClose}
         onSubmit={onSubmit}
       />
     </>
@@ -63,14 +67,14 @@ export default function TermContainer() {
     setValue('id', '');
     setValue('english', '');
     setValue('korean', '');
-    onOpen();
+    onDrawerOpen();
   }
   function handleModifyButtonClick(term: MyGoogleTerm) {
     setMode('update');
     setValue('id', term.id);
     setValue('english', term.english);
     setValue('korean', term.korean);
-    onOpen();
+    onDrawerOpen();
   }
 
   function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
@@ -85,7 +89,7 @@ export default function TermContainer() {
         english,
         korean,
       }).then(() => {
-        onClose();
+        onDrawerClose();
         console.log('생성 완료!');
       });
 
@@ -93,14 +97,14 @@ export default function TermContainer() {
     }
 
     updateTerm(glossaryId, termId, { english, korean }).then(() => {
-      onClose();
+      onDrawerClose();
       console.log('갱신 완료!');
     });
   }
   function handleDeleteButtonClick() {
     if (typeof glossaryId !== 'string') return;
 
-    onClose();
+    onDrawerClose();
     deleteTerm(glossaryId, getValues('id')).then(() => {
       console.log('삭제 완료!');
     });
