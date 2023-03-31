@@ -7,7 +7,6 @@ export function useTerms(glossaryId: string) {
   const { data: terms, isLoading } = useQuery<MyGoogleTerm[]>({
     queryKey: ['google', 'glossaries', glossaryId],
     queryFn: () => {
-      if (typeof glossaryId !== 'string') return [];
       return getTerms(glossaryId);
     },
   });
