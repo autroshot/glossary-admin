@@ -1,4 +1,4 @@
-import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
+import { MyGoogleTerm } from '@/types/models';
 import {
   Box,
   Button,
@@ -8,62 +8,23 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
+import { useTerms } from './hooks';
 import TermTable from './table';
 
 export default function TermContainer({ glossaryId }: Props) {
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
-  const { data: terms, isLoading: isTermsLoading } = useQuery<MyGoogleTerm[]>({
-    queryKey: ['google', 'glossaries', glossaryId],
-    queryFn: () => {
-      if (typeof glossaryId !== 'string') return [];
-      return getTerms(glossaryId);
-    },
-  });
-
-  const queryClient = useQueryClient();
-  const createMutation = useMutation<void, AxiosError, CreateMutationFnParam>({
-    mutationFn: async ({ glossaryId, term }) => {
-      return createTerm(glossaryId, term);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
-      });
-      onDrawerClose();
-      toast({ title: '용어가 생성되었습니다.', status: 'success' });
-    },
-  });
-  const updateMutation = useMutation<void, AxiosError, UpdateMutationFnParam>({
-    mutationFn: async ({ glossaryId, termId, term }) => {
-      return updateTerm(glossaryId, termId, term);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
-      });
-      onDrawerClose();
-      toast({ title: '용어가 갱신되었습니다.', status: 'success' });
-    },
-  });
-  const deleteMutation = useMutation<void, AxiosError, DeleteMutationFnParam>({
-    mutationFn: async ({ glossaryId, termId }) => {
-      return deleteTerm(glossaryId, termId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
-      });
-      onDrawerClose();
-      toast({ title: '용어가 삭제되었습니다.', status: 'success' });
-    },
-  });
+  const {
+    terms,
+    creationMutate,
+    updationMutate,
+    deletionMutate,
+    isLoading,
+    isProcessing,
+  } = useTerms(glossaryId);
 
   const toast = useToast();
   const {
@@ -85,7 +46,7 @@ export default function TermContainer({ glossaryId }: Props) {
         <Box mt="5">
           <TermTable
             terms={terms ?? []}
-            isLoading={isTermsLoading}
+            isLoading={isLoading}
             onModifyButtonClick={handleModifyButtonClick}
           />
         </Box>
@@ -100,14 +61,6 @@ export default function TermContainer({ glossaryId }: Props) {
       />
     </>
   );
-
-  function getIsProcessing(): boolean {
-    return (
-      createMutation.isLoading ||
-      updateMutation.isLoading ||
-      deleteMutation.isLoading
-    );
-  }
 
   function handleCreateButtonClick() {
     setMode('create');
@@ -125,26 +78,46 @@ export default function TermContainer({ glossaryId }: Props) {
   }
 
   function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
-    if (typeof glossaryId !== 'string') return;
-
     const termId = data.id;
     const english = data.english;
     const korean = data.korean;
 
     if (mode === 'create') {
-      createMutation.mutate({ glossaryId, term: { english, korean } });
+      creationMutate(
+        { term: { english, korean } },
+        {
+          onSuccess: () => {
+            onDrawerClose();
+            toast({ title: '용어가 생성되었습니다.', status: 'success' });
+          },
+        }
+      );
 
       return;
     }
 
-    updateMutation.mutate({ glossaryId, termId, term: { english, korean } });
+    updationMutate(
+      { termId, term: { english, korean } },
+      {
+        onSuccess: () => {
+          onDrawerClose();
+          toast({ title: '용어가 갱신되었습니다.', status: 'success' });
+        },
+      }
+    );
 
     return;
   }
   function handleDeleteButtonClick() {
-    if (typeof glossaryId !== 'string') return;
-
-    deleteMutation.mutate({ glossaryId, termId: getValues('id') });
+    deletionMutate(
+      { termId: getValues('id') },
+      {
+        onSuccess: () => {
+          onDrawerClose();
+          toast({ title: '용어가 삭제되었습니다.', status: 'success' });
+        },
+      }
+    );
   }
 
   function createFormDrawerHeaderText(): string {
@@ -154,7 +127,7 @@ export default function TermContainer({ glossaryId }: Props) {
   function createFormDrawerButtons(): ReactNode {
     if (mode === 'create') {
       return (
-        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
+        <Button type="submit" form="drawer-form" isLoading={isProcessing}>
           생성
         </Button>
       );
@@ -163,30 +136,16 @@ export default function TermContainer({ glossaryId }: Props) {
       <ButtonGroup>
         <Button
           colorScheme="red"
-          isLoading={getIsProcessing()}
+          isLoading={isProcessing}
           onClick={handleDeleteButtonClick}
         >
           삭제
         </Button>
-        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
+        <Button type="submit" form="drawer-form" isLoading={isProcessing}>
           수정
         </Button>
       </ButtonGroup>
     );
-  }
-
-  interface CreateMutationFnParam {
-    glossaryId: MyGoogleGlossary['id'];
-    term: Term;
-  }
-  interface UpdateMutationFnParam {
-    glossaryId: MyGoogleGlossary['id'];
-    termId: MyGoogleTerm['id'];
-    term: Term;
-  }
-  interface DeleteMutationFnParam {
-    glossaryId: MyGoogleGlossary['id'];
-    termId: MyGoogleTerm['id'];
   }
 }
 
