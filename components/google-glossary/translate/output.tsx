@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Textarea } from '@chakra-ui/react';
 
-export default function Output() {
+export default function Output({ translatedText }: Props) {
   return (
     <Box>
       <Heading as="h3" size="md">
@@ -9,9 +9,10 @@ export default function Output() {
       <Box mt="3">
         <Textarea
           rows={10}
-          placeholder="번역된 내용이 출력됩니다."
+          placeholder="번역된 내용이 이곳에 출력됩니다."
           resize="none"
           readOnly
+          value={translatedText}
         />
       </Box>
       <Box mt="3">
@@ -19,4 +20,8 @@ export default function Output() {
       </Box>
     </Box>
   );
+}
+
+interface Props {
+  translatedText: string;
 }

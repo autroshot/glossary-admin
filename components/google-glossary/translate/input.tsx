@@ -1,12 +1,13 @@
 import { Box, Button, Heading, Textarea } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, UseFormReturn } from 'react-hook-form';
+import { Inputs } from './container';
 
-export default function Input() {
+export default function Input({ form, onSubmit }: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = form;
 
   return (
     <Box>
@@ -29,13 +30,9 @@ export default function Input() {
       </form>
     </Box>
   );
+}
 
-  function onSubmit(data: Inputs): unknown | Promise<unknown> {
-    console.log(data);
-    return;
-  }
-
-  interface Inputs {
-    english: string;
-  }
+interface Props {
+  form: UseFormReturn<Inputs>;
+  onSubmit: SubmitHandler<Inputs>;
 }
