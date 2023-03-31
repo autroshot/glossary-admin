@@ -1,10 +1,13 @@
+import ButtonLink from '@/components/button-link';
 import { MyGoogleTerm } from '@/types/models';
 import {
   Box,
   Button,
   ButtonGroup,
   Container,
+  Flex,
   Heading,
+  Spacer,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -40,9 +43,17 @@ export default function TermContainer({ glossaryId }: Props) {
     <>
       <Container maxW="container.sm" mb="10">
         <Heading textAlign="center">구글 용어집 상세</Heading>
-        <Box mt="5">
-          <Button onClick={handleCreateButtonClick}>생성</Button>
-        </Box>
+        <Flex mt="5">
+          <Box>
+            <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+          </Box>
+          <Spacer />
+          <ButtonLink
+            size="md"
+            text="이 용어집으로 번역하기"
+            href={`/google-glossary/${glossaryId}/translate`}
+          />
+        </Flex>
         <Box mt="5">
           <TermTable
             terms={terms ?? []}
