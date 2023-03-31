@@ -10,18 +10,14 @@ import {
 } from '@chakra-ui/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useRouter } from 'next/router';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
 import TermTable from './table';
 
-export default function TermContainer() {
+export default function TermContainer({ glossaryId }: Props) {
   const [mode, setMode] = useState<'create' | 'update'>('create');
-
-  const router = useRouter();
-  const glossaryId = router.query['glossary-id'];
 
   const { data: terms, isLoading: isTermsLoading } = useQuery<MyGoogleTerm[]>({
     queryKey: ['google', 'glossaries', glossaryId],
@@ -192,4 +188,8 @@ export default function TermContainer() {
     glossaryId: MyGoogleGlossary['id'];
     termId: MyGoogleTerm['id'];
   }
+}
+
+interface Props {
+  glossaryId: string;
 }
