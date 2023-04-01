@@ -1,6 +1,8 @@
-import { Box, Button, Heading, Textarea } from '@chakra-ui/react';
+import { Box, Button, Heading, Textarea, useToast } from '@chakra-ui/react';
 
 export default function Output({ translatedText }: Props) {
+  const toast = useToast();
+
   return (
     <Box>
       <Heading as="h3" size="md">
@@ -16,10 +18,21 @@ export default function Output({ translatedText }: Props) {
         />
       </Box>
       <Box mt="3">
-        <Button>복사하기</Button>
+        <Button onClick={handleClick}>복사하기</Button>
       </Box>
     </Box>
   );
+
+  function handleClick() {
+    if (translatedText.length === 0) return;
+
+    navigator.clipboard.writeText(translatedText);
+
+    toast({
+      title: '번역된 내용이 복사되었습니다.',
+      status: 'success',
+    });
+  }
 }
 
 interface Props {
