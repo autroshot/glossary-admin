@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { translate } from './fetchers';
 import Input from './input';
 import Output from './output';
+import { Inputs } from './types';
 
 export default function Translate({ glossaryId }: Props) {
   const [translatedText, setTranslatedText] = useState('');
@@ -28,10 +29,6 @@ export default function Translate({ glossaryId }: Props) {
     });
     return;
   }
-}
-
-export interface Inputs {
-  english: string;
 }
 
 interface Props {
