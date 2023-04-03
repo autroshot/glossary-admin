@@ -1,7 +1,7 @@
 import { getGlossaries } from '@/components/google-glossary/glossary/fetchers';
 import { MyGoogleGlossary } from '@/types/models';
 import {
-  Table,
+  Table as ChakraTable,
   TableContainer,
   Tbody,
   Td,
@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from 'react';
 import ButtonLink from '../../button-link';
 
-export default function GlossaryTable() {
+export default function Table() {
   const [glossaries, setGlossaries] = useState<MyGoogleGlossary[]>([]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function GlossaryTable() {
 
   return (
     <TableContainer>
-      <Table variant="simple">
+      <ChakraTable variant="simple">
         <Thead>
           <Tr>
             <Th>이름</Th>
@@ -48,7 +48,7 @@ export default function GlossaryTable() {
             );
           })}
         </Tbody>
-      </Table>
+      </ChakraTable>
     </TableContainer>
   );
 }
