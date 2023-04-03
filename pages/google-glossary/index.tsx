@@ -1,5 +1,5 @@
 import Component from '@/components/google-glossary/glossary';
 
-export default function GoogleGlossaryList() {
+export default function List() {
   return <Component />;
 }
