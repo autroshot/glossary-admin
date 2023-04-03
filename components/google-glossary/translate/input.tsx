@@ -1,6 +1,6 @@
 import { Box, Button, Heading, Textarea } from '@chakra-ui/react';
 import { SubmitHandler, UseFormReturn } from 'react-hook-form';
-import { Inputs } from './container';
+import { Inputs } from '.';
 
 export default function Input({ form, onSubmit }: Props) {
   const {

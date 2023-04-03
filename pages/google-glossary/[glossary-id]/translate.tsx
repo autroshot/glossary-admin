@@ -1,4 +1,4 @@
-import TranslateContainer from '@/components/google-glossary/translate/container';
+import Component from '@/components/google-glossary/translate';
 import { useRouter } from 'next/router';
 
 export default function Translate() {
@@ -6,5 +6,5 @@ export default function Translate() {
   const glossaryId = router.query['glossary-id'];
 
   if (typeof glossaryId !== 'string') return null;
-  return <TranslateContainer glossaryId={glossaryId} />;
+  return <Component glossaryId={glossaryId} />;
 }

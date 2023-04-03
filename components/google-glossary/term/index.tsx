@@ -17,7 +17,7 @@ import TermFormDrawer from './form-drawer';
 import { useTerms } from './hooks';
 import TermTable from './table';
 
-export default function TermContainer({ glossaryId }: Props) {
+export default function Term({ glossaryId }: Props) {
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
   const {

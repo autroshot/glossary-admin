@@ -5,7 +5,7 @@ import { translate } from './fetchers';
 import Input from './input';
 import Output from './output';
 
-export default function TranslateContainer({ glossaryId }: Props) {
+export default function Translate({ glossaryId }: Props) {
   const [translatedText, setTranslatedText] = useState('');
 
   const form = useForm<Inputs>();

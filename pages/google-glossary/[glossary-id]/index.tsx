@@ -1,4 +1,4 @@
-import TermContainer from '@/components/google-glossary/term/container';
+import Term from '@/components/google-glossary/term';
 import { useRouter } from 'next/router';
 
 export default function Detail() {
@@ -6,5 +6,5 @@ export default function Detail() {
   const glossaryId = router.query['glossary-id'];
 
   if (typeof glossaryId !== 'string') return null;
-  return <TermContainer glossaryId={glossaryId} />;
+  return <Term glossaryId={glossaryId} />;
 }
