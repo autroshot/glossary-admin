@@ -1,16 +1,12 @@
 import { Box, Container, Heading, SimpleGrid } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { translate } from './fetchers';
 import Input from './input';
 import Output from './output';
 
-export default function TranslateContainer() {
+export default function TranslateContainer({ glossaryId }: Props) {
   const [translatedText, setTranslatedText] = useState('');
-
-  const router = useRouter();
-  const glossaryId = router.query['glossary-id'];
 
   const form = useForm<Inputs>();
 
@@ -27,8 +23,6 @@ export default function TranslateContainer() {
   );
 
   function onSubmit(data: Inputs): unknown | Promise<unknown> {
-    if (typeof glossaryId !== 'string') return;
-
     translate(glossaryId, data.english).then((translatedText) => {
       setTranslatedText(translatedText);
     });
@@ -38,4 +32,8 @@ export default function TranslateContainer() {
 
 export interface Inputs {
   english: string;
+}
+
+interface Props {
+  glossaryId: string;
 }
