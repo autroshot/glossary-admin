@@ -1,4 +1,5 @@
 import { Controller } from '@/types/controller';
+import { createDataResponse } from '../utils';
 import { createJWTClient } from './utils';
 
 const translate: Controller = async (req, res) => {
@@ -17,7 +18,7 @@ const translate: Controller = async (req, res) => {
     googleAPIResponse.data.glossaryTranslations[0].translatedText;
 
   if (googleAPIResponse.data)
-    return res.status(200).json({ data: translatedText });
+    return res.status(200).json(createDataResponse(translatedText));
   return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
 
   function createGoogleAPIRequestBody() {

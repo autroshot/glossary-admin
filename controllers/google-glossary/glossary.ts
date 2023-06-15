@@ -1,5 +1,6 @@
 import { Controller } from '@/types/controller';
 import { MyGoogleGlossary } from '@/types/models';
+import { createDataResponse } from '../utils';
 import { createJWTClient } from './utils';
 
 const getGlossaries: Controller = async (req, res) => {
@@ -13,7 +14,7 @@ const getGlossaries: Controller = async (req, res) => {
   const googleGlossaries = googleAPIResponse.data.glossaries;
   const myGoogleGlossaries = googleGlossaries.map(toMyGoogleGlossary);
 
-  return res.status(200).json({ data: myGoogleGlossaries });
+  return res.status(200).json(createDataResponse(myGoogleGlossaries));
 
   function toMyGoogleGlossary(
     googleGlossary: GoogleGlossary

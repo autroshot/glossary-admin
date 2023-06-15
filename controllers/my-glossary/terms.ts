@@ -1,5 +1,6 @@
 import { Controller } from '@/types/controller';
 import { MyTerm } from '@/types/models';
+import { createDataResponse } from '../utils';
 import { MyRow } from './types';
 import { getRows, getSheet } from './utils';
 
@@ -9,14 +10,14 @@ const createTerm: Controller = async (req, res) => {
   const sheet = await getSheet();
   await sheet.addRow(term);
 
-  return res.status(200).json({ data: term });
+  return res.status(200).json(createDataResponse(term));
 };
 
 const getTerms: Controller = async (req, res) => {
   const rows = await getRows();
   const terms = rows.map(toMyTerm);
 
-  return res.status(200).json({ data: terms });
+  return res.status(200).json(createDataResponse(terms));
 
   function toMyTerm(row: MyRow): MyTerm {
     return {
