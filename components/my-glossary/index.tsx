@@ -25,7 +25,7 @@ export default function Glossary() {
 
   return (
     <Container mb="10">
-      <Heading textAlign="center">구글 용어집 목록</Heading>
+      <Heading textAlign="center">내 용어집</Heading>
       <Box mt="5">
         <TableContainer>
           <Table variant="simple">
