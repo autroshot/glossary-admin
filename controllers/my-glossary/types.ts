@@ -13,13 +13,11 @@ interface Glossary extends IndexSignature {
   source: string;
 }
 
-type MyRow<T extends IndexSignature> = {
-  [Property in keyof T]: T[Property];
-} & GoogleSpreadsheetRow;
+type MyRow = Glossary & GoogleSpreadsheetRow;
 
 class MyWorkSheet extends GoogleSpreadsheetWorksheet {
-  async getRows(options?: PaginationOptions): Promise<MyRow<Glossary>[]> {
-    return (await super.getRows(options)) as MyRow<Glossary>[];
+  async getRows(options?: PaginationOptions): Promise<MyRow[]> {
+    return (await super.getRows(options)) as MyRow[];
   }
 
   async addRow(
@@ -29,8 +27,8 @@ class MyWorkSheet extends GoogleSpreadsheetWorksheet {
         }
       | Array<string | number | boolean>,
     options?: { raw: boolean; insert: boolean }
-  ): Promise<MyRow<Glossary>> {
-    return (await super.addRow(values, options)) as MyRow<Glossary>;
+  ): Promise<MyRow> {
+    return (await super.addRow(values, options)) as MyRow;
   }
 
   async addRows(
@@ -41,8 +39,8 @@ class MyWorkSheet extends GoogleSpreadsheetWorksheet {
       | Array<string | number | boolean>
     >,
     options?: { raw: boolean; insert: boolean }
-  ): Promise<MyRow<Glossary>[]> {
-    return (await super.addRows(rowValues, options)) as MyRow<Glossary>[];
+  ): Promise<MyRow[]> {
+    return (await super.addRows(rowValues, options)) as MyRow[];
   }
 }
 
