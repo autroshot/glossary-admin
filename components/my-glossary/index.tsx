@@ -5,7 +5,6 @@ import {
   ButtonGroup,
   Container,
   Heading,
-  Skeleton,
   Table,
   TableContainer,
   Tbody,
@@ -20,6 +19,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import TableSkeletons from '../table-skeletons';
 import { createTerm, getTerms } from './fetchers';
 import TermFormDrawer from './form-drawer';
 
@@ -82,31 +82,33 @@ export default function Glossary() {
                 </Tr>
               </Thead>
               <Tbody>
-                {isLoading
-                  ? createSkeletons()
-                  : sortedTerms.map((term) => {
-                      return (
-                        <Tr key={term.english}>
-                          <Td
-                            maxW="10rem"
-                            overflow="hidden"
-                            textOverflow="ellipsis"
-                          >
-                            {term.english}
-                          </Td>
-                          <Td
-                            maxW="10rem"
-                            overflow="hidden"
-                            textOverflow="ellipsis"
-                          >
-                            {term.korean}
-                          </Td>
-                          <Td padding="0" textAlign="center">
-                            <Button size="sm">열기</Button>
-                          </Td>
-                        </Tr>
-                      );
-                    })}
+                {isLoading ? (
+                  <TableSkeletons />
+                ) : (
+                  sortedTerms.map((term) => {
+                    return (
+                      <Tr key={term.english}>
+                        <Td
+                          maxW="10rem"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
+                          {term.english}
+                        </Td>
+                        <Td
+                          maxW="10rem"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
+                          {term.korean}
+                        </Td>
+                        <Td padding="0" textAlign="center">
+                          <Button size="sm">열기</Button>
+                        </Td>
+                      </Tr>
+                    );
+                  })
+                )}
               </Tbody>
             </Table>
           </TableContainer>
@@ -144,31 +146,6 @@ export default function Glossary() {
       return;
     }
     return;
-  }
-
-  function createSkeletons(): ReactNode[] {
-    const result: ReactNode[] = [];
-    const LENGTH = 10;
-
-    for (let i = 0; i < LENGTH; i++) {
-      result.push(
-        <Tr key={i}>
-          <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-            <Skeleton>loadingloadingloading</Skeleton>
-          </Td>
-          <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
-            <Skeleton>로딩로딩로딩로딩로딩로딩</Skeleton>
-          </Td>
-          <Td padding="0" textAlign="center">
-            <Button size="sm" isLoading>
-              열기
-            </Button>
-          </Td>
-        </Tr>
-      );
-    }
-
-    return result;
   }
 
   function createFormDrawerHeaderText(): string {
