@@ -4,7 +4,7 @@ import { MyRow } from './types';
 import { getRows, getSheet } from './utils';
 
 const createTerm: Controller = async (req, res) => {
-  const term = req.body as MyTerm;
+  const term = req.body as SpreadsheetIndexSignature;
 
   const sheet = await getSheet();
   await sheet.addRow(term);
@@ -29,5 +29,9 @@ const getTerms: Controller = async (req, res) => {
     };
   }
 };
+
+interface SpreadsheetIndexSignature {
+  [header: string]: string | number | boolean;
+}
 
 export { createTerm, getTerms };
