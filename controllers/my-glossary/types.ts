@@ -4,7 +4,7 @@ import {
   PaginationOptions,
 } from 'google-spreadsheet';
 
-interface Glossary extends IndexSignature {
+interface Glossary {
   english: string;
   korean: string;
   type: string;
@@ -42,10 +42,6 @@ class MyWorkSheet extends GoogleSpreadsheetWorksheet {
   ): Promise<MyRow[]> {
     return (await super.addRows(rowValues, options)) as MyRow[];
   }
-}
-
-interface IndexSignature {
-  [key: string]: string | number | boolean;
 }
 
 export type { Glossary, MyRow, MyWorkSheet };

@@ -1,3 +1,4 @@
+import { Glossary as GlossaryTerm } from '@/controllers/my-glossary/types';
 import {
   Box,
   Button,
@@ -12,16 +13,22 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
+import { getTerms } from './fetchers';
 
 export default function Glossary() {
-  const isLoading = false;
-  const terms = [
-    { english: 'Zustand', korean: '트슈탄트' },
-    { english: 'Zustand', korean: '트슈탄트' },
-    { english: 'Zustand', korean: '트슈탄트' },
-    { english: 'Zustand', korean: '트슈탄트' },
-  ];
+  const { data: terms, isLoading } = useQuery<GlossaryTerm[]>({
+    queryKey: ['my', 'glossary'],
+    queryFn: () => {
+      return getTerms();
+    },
+  });
+
+  let sortedTerms: GlossaryTerm[] = [];
+  if (terms) {
+    sortedTerms = [...terms].sort((a, b) => a.english.localeCompare(b.english));
+  }
 
   return (
     <Container mb="10">
@@ -39,7 +46,7 @@ export default function Glossary() {
             <Tbody>
               {isLoading
                 ? createSkeletons()
-                : terms.map((term) => {
+                : sortedTerms.map((term) => {
                     return (
                       <Tr key={term.english}>
                         <Td
