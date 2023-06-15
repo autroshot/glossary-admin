@@ -39,3 +39,5 @@ async function getDoc() {
 
   return doc;
 }
+
+export { getRows };
