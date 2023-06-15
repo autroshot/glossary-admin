@@ -1,17 +1,9 @@
+import { MyTerm } from '@/types/models';
 import {
   GoogleSpreadsheetRow,
   GoogleSpreadsheetWorksheet,
   PaginationOptions,
 } from 'google-spreadsheet';
-
-interface MyTerm {
-  english: string;
-  korean: string;
-  type: string;
-  field: string;
-  description: string;
-  source: string;
-}
 
 type MyRow = MyTerm & GoogleSpreadsheetRow;
 
@@ -44,4 +36,4 @@ class MyWorkSheet extends GoogleSpreadsheetWorksheet {
   }
 }
 
-export type { MyTerm, MyRow, MyWorkSheet };
+export type { MyRow, MyWorkSheet };

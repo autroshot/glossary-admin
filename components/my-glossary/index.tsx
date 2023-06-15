@@ -1,4 +1,4 @@
-import { MyTerm } from '@/controllers/my-glossary/types';
+import { MyTerm } from '@/types/models';
 import {
   Box,
   Button,

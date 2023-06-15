@@ -1,5 +1,6 @@
 import { Controller } from '@/types/controller';
-import { MyRow, MyTerm } from './types';
+import { MyTerm } from '@/types/models';
+import { MyRow } from './types';
 import { getRows } from './utils';
 
 const getTerms: Controller = async (req, res) => {
