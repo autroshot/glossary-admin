@@ -1,7 +1,11 @@
-import { DataResponse } from '@/types/responses';
+import { DataResponse, ErrorResponse } from '@/types/responses';
 
 function createDataResponse<T>(data: T): DataResponse<T> {
   return { data };
 }
 
-export { createDataResponse };
+function createErrorResponse(message: string): ErrorResponse {
+  return { message };
+}
+
+export { createDataResponse, createErrorResponse };
