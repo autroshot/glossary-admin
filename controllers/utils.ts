@@ -1,4 +1,4 @@
-function createDataResponse(data: any) {
+function createDataResponse<T>(data: T) {
   return { data };
 }
 
