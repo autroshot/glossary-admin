@@ -1,12 +1,6 @@
 import { getGlossaries } from '@/controllers/google-glossary/glossary';
-import { controllerSwitch } from '@/utils/api';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { handler } from '@/utils/api';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  await controllerSwitch(req, res, {
-    GETController: getGlossaries,
-  });
-}
+export default handler({
+  GETController: getGlossaries,
+});
