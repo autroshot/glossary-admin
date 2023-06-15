@@ -15,7 +15,7 @@ const createTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json(createErrorResponse('서버 오류가 발생했습니다.'));
+  return res.status(500).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const getTerms: Controller = async (req, res) => {
@@ -61,7 +61,7 @@ const updateTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json(createErrorResponse('서버 오류가 발생했습니다.'));
+  return res.status(500).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const deleteTerm: Controller = async (req, res) => {
