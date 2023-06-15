@@ -1,6 +1,6 @@
 import { Controller } from '@/types/controller';
 import { GoogleTerm, MyGoogleGlossary, MyGoogleTerm } from '@/types/models';
-import { createDataResponse } from '../utils';
+import { createDataResponse, createErrorResponse } from '../utils';
 import { createJWTClient } from './utils';
 
 const createTerm: Controller = async (req, res) => {
@@ -15,7 +15,7 @@ const createTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
+  return res.status(200).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const getTerms: Controller = async (req, res) => {
@@ -61,7 +61,7 @@ const updateTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
+  return res.status(200).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const deleteTerm: Controller = async (req, res) => {

@@ -1,3 +1,4 @@
+import { createErrorResponse } from '@/controllers/utils';
 import { Controller } from '@/types/controller';
 import { isAxiosError } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -55,7 +56,7 @@ export function handler(controllerByMethod: ControllerByMethod) {
       }
 
       console.error(err);
-      res.status(500).json({ message: '서버에 오류가 발생했습니다.' });
+      res.status(500).json(createErrorResponse('서버 오류가 발생했습니다.'));
     }
   };
 }
