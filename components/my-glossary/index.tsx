@@ -1,4 +1,4 @@
-import { Glossary as GlossaryTerm } from '@/controllers/my-glossary/types';
+import { MyTerm } from '@/controllers/my-glossary/types';
 import {
   Box,
   Button,
@@ -18,14 +18,14 @@ import { ReactNode } from 'react';
 import { getTerms } from './fetchers';
 
 export default function Glossary() {
-  const { data: terms, isLoading } = useQuery<GlossaryTerm[]>({
+  const { data: terms, isLoading } = useQuery<MyTerm[]>({
     queryKey: ['my', 'glossary'],
     queryFn: () => {
       return getTerms();
     },
   });
 
-  let sortedTerms: GlossaryTerm[] = [];
+  let sortedTerms: MyTerm[] = [];
   if (terms) {
     sortedTerms = [...terms].sort((a, b) => a.english.localeCompare(b.english));
   }

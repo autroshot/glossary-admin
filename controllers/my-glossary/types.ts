@@ -4,7 +4,7 @@ import {
   PaginationOptions,
 } from 'google-spreadsheet';
 
-interface Glossary {
+interface MyTerm {
   english: string;
   korean: string;
   type: string;
@@ -13,7 +13,7 @@ interface Glossary {
   source: string;
 }
 
-type MyRow = Glossary & GoogleSpreadsheetRow;
+type MyRow = MyTerm & GoogleSpreadsheetRow;
 
 class MyWorkSheet extends GoogleSpreadsheetWorksheet {
   async getRows(options?: PaginationOptions): Promise<MyRow[]> {
@@ -44,4 +44,4 @@ class MyWorkSheet extends GoogleSpreadsheetWorksheet {
   }
 }
 
-export type { Glossary, MyRow, MyWorkSheet };
+export type { MyTerm, MyRow, MyWorkSheet };

@@ -1,11 +1,9 @@
-import { Glossary } from '@/controllers/my-glossary/types';
+import { MyTerm } from '@/controllers/my-glossary/types';
 import { DataResponse } from '@/types/responses';
 import axios from 'axios';
 
-export async function getTerms(): Promise<Glossary[]> {
-  const res = await axios.get<DataResponse<Glossary[]>>(
-    `/api/my-glossary/terms`
-  );
+export async function getTerms(): Promise<MyTerm[]> {
+  const res = await axios.get<DataResponse<MyTerm[]>>(`/api/my-glossary/terms`);
 
   return res.data.data;
 }
