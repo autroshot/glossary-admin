@@ -13,15 +13,32 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { ReactNode } from 'react';
-import { getTerms } from './fetchers';
+import { createTerm, getTerms } from './fetchers';
 
 export default function Glossary() {
   const { data: terms, isLoading } = useQuery<MyTerm[]>({
     queryKey: ['my', 'glossary'],
     queryFn: () => {
       return getTerms();
+    },
+  });
+
+  const queryClient = useQueryClient();
+  const { mutate: creationMutate, isLoading: isCreationLoading } = useMutation<
+    void,
+    AxiosError,
+    CreateMutationFnParam
+  >({
+    mutationFn: ({ term }) => {
+      return createTerm(term);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['my', 'glossary'],
+      });
     },
   });
 
@@ -33,6 +50,9 @@ export default function Glossary() {
   return (
     <Container mb="10">
       <Heading textAlign="center">내 용어집</Heading>
+      <Box mt="5">
+        <Button>용어 생성</Button>
+      </Box>
       <Box mt="5">
         <TableContainer>
           <Table variant="simple">
@@ -99,5 +119,9 @@ export default function Glossary() {
     }
 
     return result;
+  }
+
+  interface CreateMutationFnParam {
+    term: MyTerm;
   }
 }

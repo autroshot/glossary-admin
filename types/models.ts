@@ -15,13 +15,17 @@ interface GoogleTerm {
   korean: string;
 }
 
-interface MyTerm {
+interface MyTerm extends SpreadsheetIndexSignature {
   english: string;
   korean: string;
   type: string;
   field: string;
   description: string;
   source: string;
+}
+
+interface SpreadsheetIndexSignature {
+  [header: string]: string | number | boolean;
 }
 
 export type { MyGoogleGlossary, MyGoogleTerm, GoogleTerm, MyTerm };

@@ -40,4 +40,4 @@ async function getDoc() {
   return doc;
 }
 
-export { getRows };
+export { getRows, getSheet };

@@ -1,7 +1,16 @@
 import { Controller } from '@/types/controller';
 import { MyTerm } from '@/types/models';
 import { MyRow } from './types';
-import { getRows } from './utils';
+import { getRows, getSheet } from './utils';
+
+const createTerm: Controller = async (req, res) => {
+  const term = req.body as MyTerm;
+
+  const sheet = await getSheet();
+  await sheet.addRow(term);
+
+  return res.status(200).json({ data: term });
+};
 
 const getTerms: Controller = async (req, res) => {
   const rows = await getRows();
@@ -21,4 +30,4 @@ const getTerms: Controller = async (req, res) => {
   }
 };
 
-export { getTerms };
+export { createTerm, getTerms };
