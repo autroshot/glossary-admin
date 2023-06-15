@@ -1,4 +1,4 @@
-import { MyGoogleTerm, Term } from '@/types/models';
+import { GoogleTerm, MyGoogleTerm } from '@/types/models';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
@@ -69,11 +69,11 @@ export function useTerms(glossaryId: string) {
   }
 
   interface CreateMutationFnParam {
-    term: Term;
+    term: GoogleTerm;
   }
   interface UpdateMutationFnParam {
     termId: MyGoogleTerm['id'];
-    term: Term;
+    term: GoogleTerm;
   }
   interface DeleteMutationFnParam {
     termId: MyGoogleTerm['id'];

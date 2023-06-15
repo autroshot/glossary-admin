@@ -1,10 +1,10 @@
 import { Controller } from '@/types/controller';
-import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
+import { GoogleTerm, MyGoogleGlossary, MyGoogleTerm } from '@/types/models';
 import { createJWTClient } from './utils';
 
 const createTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'];
-  const receivedBody = req.body as Term;
+  const receivedBody = req.body as GoogleTerm;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPICreateResponse>({
@@ -50,7 +50,7 @@ const getTerms: Controller = async (req, res) => {
 const updateTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
   const termId = req.query['term-id'] as MyGoogleTerm['id'];
-  const receivedBody = req.body as Term;
+  const receivedBody = req.body as GoogleTerm;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIUpdateResponse>({
@@ -93,7 +93,7 @@ interface GoogleGlossaryEntry {
   };
 }
 
-function toRequestBody(receivedBody: Term): PostRequestBody {
+function toRequestBody(receivedBody: GoogleTerm): PostRequestBody {
   return {
     termsPair: {
       sourceTerm: { languageCode: 'en', text: receivedBody.english },
