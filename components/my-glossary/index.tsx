@@ -1,4 +1,5 @@
 import { MyTerm } from '@/types/models';
+import { ErrorResponse } from '@/types/responses';
 import {
   Box,
   Button,
@@ -36,7 +37,7 @@ export default function Glossary() {
   const queryClient = useQueryClient();
   const { mutate: creationMutate, isLoading: isCreationLoading } = useMutation<
     void,
-    AxiosError,
+    AxiosError<ErrorResponse>,
     CreateMutationFnParam
   >({
     mutationFn: ({ term }) => {
@@ -45,6 +46,13 @@ export default function Glossary() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['my', 'glossary'],
+      });
+    },
+    onError: (err) => {
+      console.log(err.response?.data.message);
+      toast({
+        title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+        status: 'error',
       });
     },
   });
