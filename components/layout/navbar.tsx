@@ -18,7 +18,7 @@ export default function Navbar() {
         <Heading size="md">용어집 관리자</Heading>
       </Link>
       <Link as={NextLink} href="/google-glossary" ms="3">
-        구글 번역
+        구글 용어집
       </Link>
       <Spacer />
       <IconButton
