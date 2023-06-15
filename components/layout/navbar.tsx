@@ -20,6 +20,9 @@ export default function Navbar() {
       <Link as={NextLink} href="/google-glossary" ms="3">
         구글 용어집
       </Link>
+      <Link as={NextLink} href="/my-glossary" ms="3">
+        내 용어집
+      </Link>
       <Spacer />
       <IconButton
         aria-label="어두운 모드"
