@@ -1,4 +1,4 @@
-import { deleteTerm, updateTerm } from '@/controllers/google-glossary/term';
+import { deleteTerm, updateTerm } from '@/controllers/my-glossary/term';
 import { handler } from '@/utils/api';
 
 export default handler({

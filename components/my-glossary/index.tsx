@@ -1,23 +1,22 @@
-import ButtonLink from '@/components/button-link';
-import { MyGoogleTerm } from '@/types/models';
+import { MyTerm } from '@/types/models';
+import { ErrorResponse } from '@/types/responses';
 import {
   Box,
   Button,
   ButtonGroup,
   Container,
-  Flex,
   Heading,
-  Spacer,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import TermTable from '../../term-table';
+import TermTable from '../term-table';
 import TermFormDrawer from './form-drawer';
 import { useTerms } from './hooks';
 
-export default function Term({ glossaryId }: Props) {
+export default function Glossary() {
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
   const {
@@ -27,7 +26,10 @@ export default function Term({ glossaryId }: Props) {
     deletionMutate,
     isLoading,
     isProcessing,
-  } = useTerms(glossaryId);
+  } = useTerms();
+
+  const form = useForm<MyTerm>();
+  const { setValue, getValues, reset } = form;
 
   const toast = useToast();
   const {
@@ -36,27 +38,21 @@ export default function Term({ glossaryId }: Props) {
     onClose: onDrawerClose,
   } = useDisclosure();
 
-  const form = useForm<MyGoogleTerm>();
-  const { getValues, setValue } = form;
+  let sortedTerms: MyTerm[] = [];
+  if (terms) {
+    sortedTerms = [...terms].sort((a, b) => a.english.localeCompare(b.english));
+  }
 
   return (
     <>
-      <Container maxW="container.sm" mb="10">
-        <Heading textAlign="center">구글 용어집 상세</Heading>
-        <Flex mt="5">
-          <Box>
-            <Button onClick={handleCreateButtonClick}>용어 생성</Button>
-          </Box>
-          <Spacer />
-          <ButtonLink
-            size="md"
-            text="이 용어집으로 번역하기"
-            href={`/google-glossary/${glossaryId}/translate`}
-          />
-        </Flex>
+      <Container mb="10">
+        <Heading textAlign="center">내 용어집</Heading>
+        <Box mt="5">
+          <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+        </Box>
         <Box mt="5">
           <TermTable
-            terms={terms ?? []}
+            terms={sortedTerms}
             isLoading={isLoading}
             onModifyButtonClick={handleModifyButtonClick}
           />
@@ -65,6 +61,7 @@ export default function Term({ glossaryId }: Props) {
       <TermFormDrawer
         form={form}
         isOpen={isDrawerOpen}
+        isEnglishReadOnly={mode === 'create' ? false : true}
         headerText={createFormDrawerHeaderText()}
         buttons={createFormDrawerButtons()}
         onClose={onDrawerClose}
@@ -75,32 +72,30 @@ export default function Term({ glossaryId }: Props) {
 
   function handleCreateButtonClick() {
     setMode('create');
-    setValue('id', '');
-    setValue('english', '');
-    setValue('korean', '');
+    reset();
     onDrawerOpen();
   }
-  function handleModifyButtonClick(term: MyGoogleTerm) {
+  function handleModifyButtonClick(term: MyTerm) {
     setMode('update');
-    setValue('id', term.id);
     setValue('english', term.english);
     setValue('korean', term.korean);
+    setValue('type', term.type);
+    setValue('field', term.field);
+    setValue('description', term.description);
+    setValue('source', term.source);
     onDrawerOpen();
   }
 
-  function onSubmit(data: MyGoogleTerm): unknown | Promise<unknown> {
-    const termId = data.id;
-    const english = data.english;
-    const korean = data.korean;
-
+  function onSubmit(data: MyTerm): unknown | Promise<unknown> {
     if (mode === 'create') {
       creationMutate(
-        { term: { english, korean } },
+        { term: data },
         {
           onSuccess: () => {
             onDrawerClose();
             toast({ title: '용어가 생성되었습니다.', status: 'success' });
           },
+          onError: handleError,
         }
       );
 
@@ -108,27 +103,33 @@ export default function Term({ glossaryId }: Props) {
     }
 
     updationMutate(
-      { termId, term: { english, korean } },
+      { term: data },
       {
         onSuccess: () => {
           onDrawerClose();
           toast({ title: '용어가 갱신되었습니다.', status: 'success' });
         },
+        onError: handleError,
       }
     );
 
     return;
   }
   function handleDeleteButtonClick() {
-    deletionMutate(
-      { termId: getValues('id') },
-      {
-        onSuccess: () => {
-          onDrawerClose();
-          toast({ title: '용어가 삭제되었습니다.', status: 'success' });
-        },
-      }
-    );
+    deletionMutate(getValues('english'), {
+      onSuccess: () => {
+        onDrawerClose();
+        toast({ title: '용어가 삭제되었습니다.', status: 'success' });
+      },
+      onError: handleError,
+    });
+  }
+
+  function handleError(err: AxiosError<ErrorResponse>): void {
+    toast({
+      title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+      status: 'error',
+    });
   }
 
   function createFormDrawerHeaderText(): string {
@@ -158,8 +159,4 @@ export default function Term({ glossaryId }: Props) {
       </ButtonGroup>
     );
   }
-}
-
-interface Props {
-  glossaryId: string;
 }

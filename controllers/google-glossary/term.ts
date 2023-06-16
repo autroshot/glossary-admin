@@ -1,10 +1,11 @@
 import { Controller } from '@/types/controller';
-import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
+import { GoogleTerm, MyGoogleGlossary, MyGoogleTerm } from '@/types/models';
+import { createDataResponse, createErrorResponse } from '../utils';
 import { createJWTClient } from './utils';
 
 const createTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'];
-  const receivedBody = req.body as Term;
+  const receivedBody = req.body as GoogleTerm;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPICreateResponse>({
@@ -14,7 +15,7 @@ const createTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
+  return res.status(500).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const getTerms: Controller = async (req, res) => {
@@ -29,7 +30,7 @@ const getTerms: Controller = async (req, res) => {
   const googleGlossaryEntries = googleAPIResponse.data.glossaryEntries;
   const myGoogleTerms = googleGlossaryEntries.map(toMyGoogleTerm);
 
-  return res.status(200).json({ data: myGoogleTerms });
+  return res.status(200).json(createDataResponse(myGoogleTerms));
 
   function toMyGoogleTerm(
     googleGlossaryEntry: GoogleGlossaryEntry
@@ -50,7 +51,7 @@ const getTerms: Controller = async (req, res) => {
 const updateTerm: Controller = async (req, res) => {
   const glossaryId = req.query['glossary-id'] as MyGoogleGlossary['id'];
   const termId = req.query['term-id'] as MyGoogleTerm['id'];
-  const receivedBody = req.body as Term;
+  const receivedBody = req.body as GoogleTerm;
 
   const client = createJWTClient();
   const googleAPIResponse = await client.request<GoogleAPIUpdateResponse>({
@@ -60,7 +61,7 @@ const updateTerm: Controller = async (req, res) => {
   });
 
   if (googleAPIResponse.data) return res.status(200).end();
-  return res.status(200).json({ message: '서버 오류가 발생했습니다.' });
+  return res.status(500).json(createErrorResponse('서버 오류가 발생했습니다.'));
 };
 
 const deleteTerm: Controller = async (req, res) => {
@@ -93,7 +94,7 @@ interface GoogleGlossaryEntry {
   };
 }
 
-function toRequestBody(receivedBody: Term): PostRequestBody {
+function toRequestBody(receivedBody: GoogleTerm): PostRequestBody {
   return {
     termsPair: {
       sourceTerm: { languageCode: 'en', text: receivedBody.english },

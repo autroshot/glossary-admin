@@ -1,10 +1,10 @@
-import { MyGoogleGlossary, MyGoogleTerm, Term } from '@/types/models';
+import { GoogleTerm, MyGoogleGlossary, MyGoogleTerm } from '@/types/models';
 import { DataResponse } from '@/types/responses';
 import axios from 'axios';
 
 export async function createTerm(
   glossaryId: MyGoogleGlossary['id'],
-  term: Term
+  term: GoogleTerm
 ): Promise<void> {
   await axios.post(`/api/google-glossaries/${glossaryId}/terms`, term);
 
@@ -22,7 +22,7 @@ export async function getTerms(glossaryId: MyGoogleGlossary['id']) {
 export async function updateTerm(
   glossaryId: MyGoogleGlossary['id'],
   termId: MyGoogleTerm['id'],
-  term: Term
+  term: GoogleTerm
 ): Promise<void> {
   await axios.put(`/api/google-glossaries/${glossaryId}/terms/${termId}`, term);
 

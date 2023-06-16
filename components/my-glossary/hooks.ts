@@ -1,56 +1,57 @@
-import { GoogleTerm, MyGoogleTerm } from '@/types/models';
+import { MyTerm } from '@/types/models';
+import { ErrorResponse } from '@/types/responses';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 
-function useTerms(glossaryId: string) {
-  const { data: terms, isLoading } = useQuery<MyGoogleTerm[]>({
-    queryKey: ['google', 'glossaries', glossaryId],
+function useTerms() {
+  const { data: terms, isLoading } = useQuery<MyTerm[]>({
+    queryKey: ['my', 'glossary'],
     queryFn: () => {
-      return getTerms(glossaryId);
+      return getTerms();
     },
   });
 
   const queryClient = useQueryClient();
   const { mutate: creationMutate, isLoading: isCreating } = useMutation<
     void,
-    AxiosError,
+    AxiosError<ErrorResponse>,
     CreateMutationFnParam
   >({
     mutationFn: ({ term }) => {
-      return createTerm(glossaryId, term);
+      return createTerm(term);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
+        queryKey: ['my', 'glossary'],
       });
     },
   });
   const { mutate: updationMutate, isLoading: isUpdating } = useMutation<
     void,
-    AxiosError,
+    AxiosError<ErrorResponse>,
     UpdateMutationFnParam
   >({
-    mutationFn: ({ termId, term }) => {
-      return updateTerm(glossaryId, termId, term);
+    mutationFn: ({ term }) => {
+      return updateTerm(term);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
+        queryKey: ['my', 'glossary'],
       });
     },
   });
   const { mutate: deletionMutate, isLoading: isDeleting } = useMutation<
     void,
-    AxiosError,
+    AxiosError<ErrorResponse>,
     DeleteMutationFnParam
   >({
-    mutationFn: ({ termId }) => {
-      return deleteTerm(glossaryId, termId);
+    mutationFn: (english) => {
+      return deleteTerm(english);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['google', 'glossaries', glossaryId],
+        queryKey: ['my', 'glossary'],
       });
     },
   });
@@ -68,14 +69,11 @@ function useTerms(glossaryId: string) {
 }
 
 interface CreateMutationFnParam {
-  term: GoogleTerm;
+  term: MyTerm;
 }
 interface UpdateMutationFnParam {
-  termId: MyGoogleTerm['id'];
-  term: GoogleTerm;
+  term: MyTerm;
 }
-interface DeleteMutationFnParam {
-  termId: MyGoogleTerm['id'];
-}
+type DeleteMutationFnParam = MyTerm['english'];
 
 export { useTerms };
