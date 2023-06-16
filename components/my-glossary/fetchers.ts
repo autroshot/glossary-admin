@@ -22,3 +22,9 @@ export async function updateTerm(term: MyTerm): Promise<void> {
 
   return;
 }
+
+export async function deleteTerm(english: string): Promise<void> {
+  await axios.delete(`/api/my-glossary/terms/${english}`);
+
+  return;
+}
