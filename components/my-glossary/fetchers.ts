@@ -14,11 +14,11 @@ export async function getTerms(): Promise<MyTerm[]> {
   return res.data.data;
 }
 
-export async function updateTerm(term: MyTerm): Promise<MyTerm> {
-  const res = await axios.put<DataResponse<MyTerm>>(
+export async function updateTerm(term: MyTerm): Promise<void> {
+  await axios.put<DataResponse<MyTerm>>(
     `/api/my-glossary/terms/${term.english}`,
     term
   );
 
-  return res.data.data;
+  return;
 }

@@ -68,7 +68,7 @@ const updateTerm: Controller = async (req, res) => {
 
   await foundRow.save();
 
-  return res.status(200).json(createDataResponse(term));
+  return res.status(200).end();
 };
 
 type MyTermWithIndexSignature = MyTerm & SpreadsheetIndexSignature;

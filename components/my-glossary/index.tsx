@@ -21,7 +21,7 @@ import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import TableSkeletons from '../table-skeletons';
-import { createTerm, getTerms } from './fetchers';
+import { createTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
 
 export default function Glossary() {
@@ -42,6 +42,27 @@ export default function Glossary() {
   >({
     mutationFn: ({ term }) => {
       return createTerm(term);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['my', 'glossary'],
+      });
+    },
+    onError: (err) => {
+      console.log(err.response?.data.message);
+      toast({
+        title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+        status: 'error',
+      });
+    },
+  });
+  const { mutate: updationMutate, isLoading: isUpdationLoading } = useMutation<
+    void,
+    AxiosError<ErrorResponse>,
+    UpdateMutationFnParam
+  >({
+    mutationFn: ({ term }) => {
+      return updateTerm(term);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -181,6 +202,9 @@ export default function Glossary() {
   }
 
   interface CreateMutationFnParam {
+    term: MyTerm;
+  }
+  interface UpdateMutationFnParam {
     term: MyTerm;
   }
 }
