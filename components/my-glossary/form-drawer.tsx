@@ -19,6 +19,7 @@ import { SubmitHandler, UseFormReturn } from 'react-hook-form';
 export default function TermFormDrawer({
   form,
   isOpen,
+  isEnglishReadOnly,
   headerText,
   buttons,
   onClose,
@@ -40,7 +41,10 @@ export default function TermFormDrawer({
         <DrawerBody>
           <form id="drawer-form" onSubmit={handleSubmit(onSubmit)}>
             <VStack>
-              <FormControl isInvalid={Boolean(errors.english)}>
+              <FormControl
+                isInvalid={Boolean(errors.english)}
+                isReadOnly={isEnglishReadOnly}
+              >
                 <FormLabel>영어</FormLabel>
                 <Input
                   {...register('english', { required: '필숫값입니다.' })}
@@ -85,6 +89,7 @@ export default function TermFormDrawer({
 interface Props {
   form: UseFormReturn<MyTerm>;
   isOpen: boolean;
+  isEnglishReadOnly: boolean;
   headerText: string;
   buttons: ReactNode;
   onClose: () => void;

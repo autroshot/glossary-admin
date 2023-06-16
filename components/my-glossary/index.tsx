@@ -132,7 +132,12 @@ export default function Glossary() {
                           {term.korean}
                         </Td>
                         <Td padding="0" textAlign="center">
-                          <Button size="sm">열기</Button>
+                          <Button
+                            size="sm"
+                            onClick={() => handleModifyButtonClick(term)}
+                          >
+                            열기
+                          </Button>
                         </Td>
                       </Tr>
                     );
@@ -146,6 +151,7 @@ export default function Glossary() {
       <TermFormDrawer
         form={form}
         isOpen={isDrawerOpen}
+        isEnglishReadOnly={mode === 'create' ? false : true}
         headerText={createFormDrawerHeaderText()}
         buttons={createFormDrawerButtons()}
         onClose={onDrawerClose}
@@ -157,6 +163,16 @@ export default function Glossary() {
   function handleCreateButtonClick() {
     setMode('create');
     reset();
+    onDrawerOpen();
+  }
+  function handleModifyButtonClick(term: MyTerm) {
+    setMode('update');
+    setValue('english', term.english);
+    setValue('korean', term.korean);
+    setValue('type', term.type);
+    setValue('field', term.field);
+    setValue('description', term.description);
+    setValue('source', term.source);
     onDrawerOpen();
   }
 
@@ -174,7 +190,22 @@ export default function Glossary() {
 
       return;
     }
+
+    updationMutate(
+      { term: data },
+      {
+        onSuccess: () => {
+          onDrawerClose();
+          toast({ title: '용어가 갱신되었습니다.', status: 'success' });
+        },
+      }
+    );
+
     return;
+  }
+
+  function getIsProcessing(): boolean {
+    return isCreationLoading || isUpdationLoading;
   }
 
   function createFormDrawerHeaderText(): string {
@@ -184,17 +215,17 @@ export default function Glossary() {
   function createFormDrawerButtons(): ReactNode {
     if (mode === 'create') {
       return (
-        <Button type="submit" form="drawer-form" isLoading={isCreationLoading}>
+        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
           생성
         </Button>
       );
     }
     return (
       <ButtonGroup>
-        <Button colorScheme="red" isLoading={isCreationLoading}>
+        <Button colorScheme="red" isLoading={getIsProcessing()}>
           삭제
         </Button>
-        <Button type="submit" form="drawer-form" isLoading={isCreationLoading}>
+        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
           수정
         </Button>
       </ButtonGroup>
