@@ -2,29 +2,28 @@ import { MyTerm } from '@/types/models';
 import { DataResponse } from '@/types/responses';
 import axios from 'axios';
 
-export async function createTerm(term: MyTerm): Promise<void> {
+async function createTerm(term: MyTerm): Promise<void> {
   await axios.post('/api/my-glossary/terms', term);
 
   return;
 }
 
-export async function getTerms(): Promise<MyTerm[]> {
+async function getTerms(): Promise<MyTerm[]> {
   const res = await axios.get<DataResponse<MyTerm[]>>('/api/my-glossary/terms');
 
   return res.data.data;
 }
 
-export async function updateTerm(term: MyTerm): Promise<void> {
-  await axios.put<DataResponse<MyTerm>>(
-    `/api/my-glossary/terms/${term.english}`,
-    term
-  );
+async function updateTerm(term: MyTerm): Promise<void> {
+  await axios.put(`/api/my-glossary/terms/${term.english}`, term);
 
   return;
 }
 
-export async function deleteTerm(english: string): Promise<void> {
+async function deleteTerm(english: string): Promise<void> {
   await axios.delete(`/api/my-glossary/terms/${english}`);
 
   return;
 }
+
+export { createTerm, getTerms, updateTerm, deleteTerm };
