@@ -1,5 +1,4 @@
 import { MyTerm } from '@/types/models';
-import { ErrorResponse } from '@/types/responses';
 import {
   Box,
   Button,
@@ -16,88 +15,23 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import TableSkeletons from '../table-skeletons';
-import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 import TermFormDrawer from './form-drawer';
+import { useTerms } from './hooks';
 
 export default function Glossary() {
   const [mode, setMode] = useState<'create' | 'update'>('create');
 
-  const { data: terms, isLoading } = useQuery<MyTerm[]>({
-    queryKey: ['my', 'glossary'],
-    queryFn: () => {
-      return getTerms();
-    },
-  });
-
-  const queryClient = useQueryClient();
-  const { mutate: creationMutate, isLoading: isCreationLoading } = useMutation<
-    void,
-    AxiosError<ErrorResponse>,
-    CreateMutationFnParam
-  >({
-    mutationFn: ({ term }) => {
-      return createTerm(term);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
-    onError: (err) => {
-      console.log(err.response?.data.message);
-      toast({
-        title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-        status: 'error',
-      });
-    },
-  });
-  const { mutate: updationMutate, isLoading: isUpdationLoading } = useMutation<
-    void,
-    AxiosError<ErrorResponse>,
-    UpdateMutationFnParam
-  >({
-    mutationFn: ({ term }) => {
-      return updateTerm(term);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
-    onError: (err) => {
-      console.log(err.response?.data.message);
-      toast({
-        title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-        status: 'error',
-      });
-    },
-  });
-  const { mutate: deletionMutate, isLoading: isDeletionLoading } = useMutation<
-    void,
-    AxiosError<ErrorResponse>,
-    DeleteMutationFnParam
-  >({
-    mutationFn: (english) => {
-      return deleteTerm(english);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
-    onError: (err) => {
-      console.log(err.response?.data.message);
-      toast({
-        title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-        status: 'error',
-      });
-    },
-  });
+  const {
+    terms,
+    creationMutate,
+    updationMutate,
+    deletionMutate,
+    isLoading,
+    isProcessing,
+  } = useTerms();
 
   const form = useForm<MyTerm>();
   const { setValue, getValues, reset } = form;
@@ -206,6 +140,12 @@ export default function Glossary() {
             onDrawerClose();
             toast({ title: '용어가 생성되었습니다.', status: 'success' });
           },
+          onError: (err) => {
+            toast({
+              title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+              status: 'error',
+            });
+          },
         }
       );
 
@@ -219,6 +159,12 @@ export default function Glossary() {
           onDrawerClose();
           toast({ title: '용어가 갱신되었습니다.', status: 'success' });
         },
+        onError: (err) => {
+          toast({
+            title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+            status: 'error',
+          });
+        },
       }
     );
 
@@ -230,11 +176,13 @@ export default function Glossary() {
         onDrawerClose();
         toast({ title: '용어가 삭제되었습니다.', status: 'success' });
       },
+      onError: (err) => {
+        toast({
+          title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+          status: 'error',
+        });
+      },
     });
-  }
-
-  function getIsProcessing(): boolean {
-    return isCreationLoading || isUpdationLoading || isDeletionLoading;
   }
 
   function createFormDrawerHeaderText(): string {
@@ -244,7 +192,7 @@ export default function Glossary() {
   function createFormDrawerButtons(): ReactNode {
     if (mode === 'create') {
       return (
-        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
+        <Button type="submit" form="drawer-form" isLoading={isProcessing}>
           생성
         </Button>
       );
@@ -253,23 +201,15 @@ export default function Glossary() {
       <ButtonGroup>
         <Button
           colorScheme="red"
-          isLoading={getIsProcessing()}
+          isLoading={isProcessing}
           onClick={handleDeleteButtonClick}
         >
           삭제
         </Button>
-        <Button type="submit" form="drawer-form" isLoading={getIsProcessing()}>
+        <Button type="submit" form="drawer-form" isLoading={isProcessing}>
           수정
         </Button>
       </ButtonGroup>
     );
   }
-
-  interface CreateMutationFnParam {
-    term: MyTerm;
-  }
-  interface UpdateMutationFnParam {
-    term: MyTerm;
-  }
-  type DeleteMutationFnParam = MyTerm['english'];
 }
