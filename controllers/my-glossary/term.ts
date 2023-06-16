@@ -71,10 +71,25 @@ const updateTerm: Controller = async (req, res) => {
   return res.status(200).end();
 };
 
+const deleteTerm: Controller = async (req, res) => {
+  const english = String(req.query.english);
+
+  const rows = await getRows();
+  const foundRow = rows.find((row) => row.english === english);
+  if (!foundRow)
+    return res
+      .status(404)
+      .json(createErrorResponse('용어를 찾을 수 없습니다.'));
+
+  await foundRow.delete();
+
+  return res.status(200).end();
+};
+
 type MyTermWithIndexSignature = MyTerm & SpreadsheetIndexSignature;
 
 interface SpreadsheetIndexSignature {
   [header: string]: string | number | boolean;
 }
 
-export { createTerm, getTerms, updateTerm };
+export { createTerm, getTerms, updateTerm, deleteTerm };
