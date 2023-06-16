@@ -49,11 +49,12 @@ const getTerms: Controller = async (req, res) => {
 };
 
 const updateTerm: Controller = async (req, res) => {
+  const english = String(req.query.english);
   const term = req.body as MyTermWithIndexSignature;
 
   const rows = await getRows();
 
-  const foundRow = rows.find((row) => row.english === term.english);
+  const foundRow = rows.find((row) => row.english === english);
   if (!foundRow)
     return res
       .status(404)
