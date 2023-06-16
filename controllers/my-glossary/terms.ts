@@ -1,6 +1,6 @@
 import { Controller } from '@/types/controller';
 import { MyTerm } from '@/types/models';
-import { createDataResponse } from '../utils';
+import { createDataResponse, createErrorResponse } from '../utils';
 import { MyRow, MyWorkSheet } from './types';
 import { getRows, getSheet } from './utils';
 
@@ -48,10 +48,32 @@ const getTerms: Controller = async (req, res) => {
   }
 };
 
+const updateTerm: Controller = async (req, res) => {
+  const term = req.body as MyTermWithIndexSignature;
+
+  const rows = await getRows();
+
+  const foundRow = rows.find((row) => row.english === term.english);
+  if (!foundRow)
+    return res
+      .status(404)
+      .json(createErrorResponse('용어를 찾을 수 없습니다.'));
+
+  foundRow.korean = term.korean;
+  foundRow.type = term.type;
+  foundRow.field = term.field;
+  foundRow.description = term.description;
+  foundRow.source = term.source;
+
+  await foundRow.save();
+
+  return res.status(200).json(createDataResponse(term));
+};
+
 type MyTermWithIndexSignature = MyTerm & SpreadsheetIndexSignature;
 
 interface SpreadsheetIndexSignature {
   [header: string]: string | number | boolean;
 }
 
-export { createTerm, getTerms };
+export { createTerm, getTerms, updateTerm };
