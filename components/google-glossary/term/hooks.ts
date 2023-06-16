@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { createTerm, deleteTerm, getTerms, updateTerm } from './fetchers';
 
-export function useTerms(glossaryId: string) {
+function useTerms(glossaryId: string) {
   const { data: terms, isLoading } = useQuery<MyGoogleTerm[]>({
     queryKey: ['google', 'glossaries', glossaryId],
     queryFn: () => {
@@ -12,7 +12,7 @@ export function useTerms(glossaryId: string) {
   });
 
   const queryClient = useQueryClient();
-  const { mutate: creationMutate, isLoading: isCreationLoading } = useMutation<
+  const { mutate: creationMutate, isLoading: isCreating } = useMutation<
     void,
     AxiosError,
     CreateMutationFnParam
@@ -26,7 +26,7 @@ export function useTerms(glossaryId: string) {
       });
     },
   });
-  const { mutate: updationMutate, isLoading: isUpdationLoading } = useMutation<
+  const { mutate: updationMutate, isLoading: isUpdating } = useMutation<
     void,
     AxiosError,
     UpdateMutationFnParam
@@ -40,7 +40,7 @@ export function useTerms(glossaryId: string) {
       });
     },
   });
-  const { mutate: deletionMutate, isLoading: isDeletionLoading } = useMutation<
+  const { mutate: deletionMutate, isLoading: isDeleting } = useMutation<
     void,
     AxiosError,
     DeleteMutationFnParam
@@ -55,27 +55,27 @@ export function useTerms(glossaryId: string) {
     },
   });
 
+  const isProcessing = isCreating || isUpdating || isDeleting;
+
   return {
     terms,
     creationMutate,
     updationMutate,
     deletionMutate,
     isLoading,
-    isProcessing: getIsProcessing(),
+    isProcessing: isProcessing,
   };
-
-  function getIsProcessing(): boolean {
-    return isCreationLoading || isUpdationLoading || isDeletionLoading;
-  }
-
-  interface CreateMutationFnParam {
-    term: GoogleTerm;
-  }
-  interface UpdateMutationFnParam {
-    termId: MyGoogleTerm['id'];
-    term: GoogleTerm;
-  }
-  interface DeleteMutationFnParam {
-    termId: MyGoogleTerm['id'];
-  }
 }
+
+interface CreateMutationFnParam {
+  term: GoogleTerm;
+}
+interface UpdateMutationFnParam {
+  termId: MyGoogleTerm['id'];
+  term: GoogleTerm;
+}
+interface DeleteMutationFnParam {
+  termId: MyGoogleTerm['id'];
+}
+
+export { useTerms };

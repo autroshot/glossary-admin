@@ -13,7 +13,7 @@ function useTerms() {
   });
 
   const queryClient = useQueryClient();
-  const { mutate: creationMutate, isLoading: isCreationLoading } = useMutation<
+  const { mutate: creationMutate, isLoading: isCreating } = useMutation<
     void,
     AxiosError<ErrorResponse>,
     CreateMutationFnParam
@@ -27,7 +27,7 @@ function useTerms() {
       });
     },
   });
-  const { mutate: updationMutate, isLoading: isUpdationLoading } = useMutation<
+  const { mutate: updationMutate, isLoading: isUpdating } = useMutation<
     void,
     AxiosError<ErrorResponse>,
     UpdateMutationFnParam
@@ -41,7 +41,7 @@ function useTerms() {
       });
     },
   });
-  const { mutate: deletionMutate, isLoading: isDeletionLoading } = useMutation<
+  const { mutate: deletionMutate, isLoading: isDeleting } = useMutation<
     void,
     AxiosError<ErrorResponse>,
     DeleteMutationFnParam
@@ -56,18 +56,16 @@ function useTerms() {
     },
   });
 
+  const isProcessing = isCreating || isUpdating || isDeleting;
+
   return {
     terms,
     creationMutate,
     updationMutate,
     deletionMutate,
     isLoading,
-    isProcessing: getIsProcessing(),
+    isProcessing: isProcessing,
   };
-
-  function getIsProcessing(): boolean {
-    return isCreationLoading || isUpdationLoading || isDeletionLoading;
-  }
 }
 
 interface CreateMutationFnParam {
