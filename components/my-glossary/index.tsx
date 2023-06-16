@@ -1,4 +1,5 @@
 import { MyTerm } from '@/types/models';
+import { ErrorResponse } from '@/types/responses';
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import TableSkeletons from '../table-skeletons';
@@ -140,12 +142,7 @@ export default function Glossary() {
             onDrawerClose();
             toast({ title: '용어가 생성되었습니다.', status: 'success' });
           },
-          onError: (err) => {
-            toast({
-              title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-              status: 'error',
-            });
-          },
+          onError: handleError,
         }
       );
 
@@ -159,12 +156,7 @@ export default function Glossary() {
           onDrawerClose();
           toast({ title: '용어가 갱신되었습니다.', status: 'success' });
         },
-        onError: (err) => {
-          toast({
-            title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-            status: 'error',
-          });
-        },
+        onError: handleError,
       }
     );
 
@@ -176,12 +168,14 @@ export default function Glossary() {
         onDrawerClose();
         toast({ title: '용어가 삭제되었습니다.', status: 'success' });
       },
-      onError: (err) => {
-        toast({
-          title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
-          status: 'error',
-        });
-      },
+      onError: handleError,
+    });
+  }
+
+  function handleError(err: AxiosError<ErrorResponse>): void {
+    toast({
+      title: err.response?.data.message ?? '서버 오류가 발생했습니다.',
+      status: 'error',
     });
   }
 
