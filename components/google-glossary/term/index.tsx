@@ -13,9 +13,9 @@ import {
 } from '@chakra-ui/react';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import TermTable from '../../term-table';
 import TermFormDrawer from './form-drawer';
 import { useTerms } from './hooks';
-import TermTable from './table';
 
 export default function Term({ glossaryId }: Props) {
   const [mode, setMode] = useState<'create' | 'update'>('create');

@@ -1,5 +1,4 @@
 import TableSkeletons from '@/components/table-skeletons';
-import { MyGoogleTerm } from '@/types/models';
 import {
   Button,
   Table,
@@ -11,11 +10,11 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-export default function TermTable({
+export default function TermTable<T extends CommonTerm>({
   terms,
   isLoading,
   onModifyButtonClick,
-}: Props) {
+}: Props<T>) {
   return (
     <TableContainer>
       <Table variant="simple">
@@ -54,8 +53,13 @@ export default function TermTable({
   );
 }
 
-interface Props {
-  terms: MyGoogleTerm[];
+interface Props<T> {
+  terms: T[];
   isLoading: boolean;
-  onModifyButtonClick: (term: MyGoogleTerm) => void;
+  onModifyButtonClick: (term: T) => void;
+}
+
+interface CommonTerm {
+  english: string;
+  korean: string;
 }
