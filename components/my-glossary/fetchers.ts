@@ -9,7 +9,7 @@ export async function createTerm(term: MyTerm): Promise<void> {
 }
 
 export async function getTerms(): Promise<MyTerm[]> {
-  const res = await axios.get<DataResponse<MyTerm[]>>(`/api/my-glossary/terms`);
+  const res = await axios.get<DataResponse<MyTerm[]>>('/api/my-glossary/terms');
 
   return res.data.data;
 }
