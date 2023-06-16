@@ -6,20 +6,13 @@ import {
   ButtonGroup,
   Container,
   Heading,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import TableSkeletons from '../table-skeletons';
+import TermTable from '../term-table';
 import TermFormDrawer from './form-drawer';
 import { useTerms } from './hooks';
 
@@ -58,51 +51,11 @@ export default function Glossary() {
           <Button onClick={handleCreateButtonClick}>용어 생성</Button>
         </Box>
         <Box mt="5">
-          <TableContainer>
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>영어</Th>
-                  <Th>한국어</Th>
-                  <Th textAlign="center">변경</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {isLoading ? (
-                  <TableSkeletons />
-                ) : (
-                  sortedTerms.map((term) => {
-                    return (
-                      <Tr key={term.english}>
-                        <Td
-                          maxW="10rem"
-                          overflow="hidden"
-                          textOverflow="ellipsis"
-                        >
-                          {term.english}
-                        </Td>
-                        <Td
-                          maxW="10rem"
-                          overflow="hidden"
-                          textOverflow="ellipsis"
-                        >
-                          {term.korean}
-                        </Td>
-                        <Td padding="0" textAlign="center">
-                          <Button
-                            size="sm"
-                            onClick={() => handleModifyButtonClick(term)}
-                          >
-                            열기
-                          </Button>
-                        </Td>
-                      </Tr>
-                    );
-                  })
-                )}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <TermTable
+            terms={sortedTerms}
+            isLoading={isLoading}
+            onModifyButtonClick={handleModifyButtonClick}
+          />
         </Box>
       </Container>
       <TermFormDrawer
