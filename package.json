@@ -24,7 +24,6 @@
     "google-auth-library": "^8.7.0",
     "google-spreadsheet": "^3.3.0",
     "next": "13.2.4",
-    "papaparse": "^5.4.1",
     "react": "18.2.0",
     "react-csv-downloader": "^2.9.1",
     "react-dom": "18.2.0",
@@ -32,7 +31,6 @@
     "typescript": "5.0.2"
   },
   "devDependencies": {
-    "@types/google-spreadsheet": "^3.3.2",
-    "@types/papaparse": "^5.3.7"
+    "@types/google-spreadsheet": "^3.3.2"
   }
 }
