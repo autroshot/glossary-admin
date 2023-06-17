@@ -1,11 +1,15 @@
 import { MyTerm } from '@/types/models';
 import { ErrorResponse } from '@/types/responses';
+import { RepeatIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
   ButtonGroup,
   Container,
+  Flex,
   Heading,
+  IconButton,
+  Spacer,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -48,7 +52,15 @@ export default function Glossary() {
       <Container mb="10">
         <Heading textAlign="center">내 용어집</Heading>
         <Box mt="5">
-          <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+          <Flex>
+            <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+            <Spacer />
+            <IconButton
+              aria-label="갱신"
+              icon={<RepeatIcon />}
+              onClick={() => console.log('clicked')}
+            />
+          </Flex>
         </Box>
         <Box mt="5">
           <TermTable
