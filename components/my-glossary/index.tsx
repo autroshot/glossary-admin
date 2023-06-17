@@ -52,15 +52,22 @@ export default function Glossary() {
         <Heading textAlign="center">내 용어집</Heading>
         <Box mt="5">
           <Flex>
-            <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+            <Button
+              isDisabled={isLoading || isProcessing}
+              onClick={handleCreateButtonClick}
+            >
+              용어 생성
+            </Button>
             <Spacer />
             <CsvDownloader
               filename="glossary"
               datas={sortedTerms as any}
               noHeader={true}
-              disabled={isLoading}
+              disabled={isLoading || isProcessing}
             >
-              <Button>CSV 파일 받기</Button>
+              <Button isDisabled={isLoading || isProcessing}>
+                CSV 파일 받기
+              </Button>
             </CsvDownloader>
           </Flex>
         </Box>
