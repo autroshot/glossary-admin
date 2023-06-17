@@ -5,7 +5,9 @@ import {
   Button,
   ButtonGroup,
   Container,
+  Flex,
   Heading,
+  Spacer,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
@@ -48,7 +50,13 @@ export default function Glossary() {
       <Container mb="10">
         <Heading textAlign="center">내 용어집</Heading>
         <Box mt="5">
-          <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+          <Flex>
+            <Button onClick={handleCreateButtonClick}>용어 생성</Button>
+            <Spacer />
+            <Button onClick={() => console.log('clicked')}>
+              CSV 파일 받기
+            </Button>
+          </Flex>
         </Box>
         <Box mt="5">
           <TermTable
