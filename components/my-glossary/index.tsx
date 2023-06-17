@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { AxiosError } from 'axios';
 import { ReactNode, useState } from 'react';
+import CsvDownloader from 'react-csv-downloader';
 import { useForm } from 'react-hook-form';
 import TermTable from '../term-table';
 import TermFormDrawer from './form-drawer';
@@ -53,9 +54,14 @@ export default function Glossary() {
           <Flex>
             <Button onClick={handleCreateButtonClick}>용어 생성</Button>
             <Spacer />
-            <Button onClick={() => console.log('clicked')}>
-              CSV 파일 받기
-            </Button>
+            <CsvDownloader
+              filename="glossary"
+              datas={sortedTerms as any}
+              noHeader={true}
+              disabled={isLoading}
+            >
+              <Button>CSV 파일 받기</Button>
+            </CsvDownloader>
           </Flex>
         </Box>
         <Box mt="5">
