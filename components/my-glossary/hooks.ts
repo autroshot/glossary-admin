@@ -13,6 +13,9 @@ function useTerms() {
   });
 
   const queryClient = useQueryClient();
+  const invalidateQueries = () => {
+    queryClient.invalidateQueries({ queryKey: ['my', 'glossary'] });
+  };
   const { mutate: creationMutate, isLoading: isCreating } = useMutation<
     void,
     AxiosError<ErrorResponse>,
@@ -21,11 +24,7 @@ function useTerms() {
     mutationFn: ({ term }) => {
       return createTerm(term);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
+    onSuccess: invalidateQueries,
   });
   const { mutate: updationMutate, isLoading: isUpdating } = useMutation<
     void,
@@ -35,11 +34,7 @@ function useTerms() {
     mutationFn: ({ term }) => {
       return updateTerm(term);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
+    onSuccess: invalidateQueries,
   });
   const { mutate: deletionMutate, isLoading: isDeleting } = useMutation<
     void,
@@ -49,11 +44,7 @@ function useTerms() {
     mutationFn: (english) => {
       return deleteTerm(english);
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ['my', 'glossary'],
-      });
-    },
+    onSuccess: invalidateQueries,
   });
 
   const isProcessing = isCreating || isUpdating || isDeleting;
