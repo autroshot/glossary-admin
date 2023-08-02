@@ -35,7 +35,7 @@ export default function TermTable<T extends CommonTerm>({
                   <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
                     {term.english}
                   </Td>
-                  <Td maxW="10rem" overflow="hidden" textOverflow="ellipsis">
+                  <Td maxW="15rem" overflow="hidden" textOverflow="ellipsis">
                     {term.korean}
                   </Td>
                   <Td padding="0" textAlign="center">
