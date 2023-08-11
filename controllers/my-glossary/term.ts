@@ -25,7 +25,6 @@ const createTerm: Controller = async (req, res) => {
       return row.english === term.english;
     });
 
-    console.log(result);
     return result;
   }
 };
